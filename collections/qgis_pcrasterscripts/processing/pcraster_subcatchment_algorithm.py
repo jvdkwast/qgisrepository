@@ -93,7 +93,18 @@ class PCRasterSubcatchmentAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("(Sub-)Catchment(s) (watershed, basin) of each one or more specified cells")
+        return self.tr(
+            """(Sub-)Catchment(s) (watershed, basin) of each one or more specified cells
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_subcatchment.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Input outlet raster</b> (required) - Boolean, nominal or ordinal raster with outlet locations
+            * <b>Result catchment layer</b> (required) - Raster with same data type as outlet raster containing catchment(s)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterSubcatchmentAlgorithm(QgsProcessingAlgorithm):
         report(CatchmentOfOutlets,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_CATCHMENT] = output_catchment
+        results[self.OUTPUT_CATCHMENT] = outputFilePath
         
         return results

@@ -92,7 +92,17 @@ class PCRasterAspectAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Aspects of a map using a digital elevation model")
+        return self.tr(
+            """Aspects of a map using a digital elevation model
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_aspect.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM</b> (required) - scalar raster layer
+            * <b>Output aspect raster</b> (required) - directional raster with aspect
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterAspectAlgorithm(QgsProcessingAlgorithm):
         report(AspectLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_ASPECT] = output_aspect
+        results[self.OUTPUT_ASPECT] = outputFilePath
         
         return results

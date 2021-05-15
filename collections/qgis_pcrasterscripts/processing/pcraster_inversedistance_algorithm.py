@@ -97,7 +97,21 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Interpolate values using inverse distance weighing (IDW).")
+        return self.tr(
+            """Interpolate values using inverse distance weighting
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_inversedistance.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input mask raster layer</b> (required) - boolean raster layer with mask
+            * <b>Raster layer with values to be interpolated</b> (required) - scalar raster layer
+            * <b>Power</b> (required) - power of the weight function (default 2)
+            * <b>Radius</b> (required) - select only the points at a distance less or equal to the cell. Default 0 includes all points.
+            * <b>Maximum number of closest points</b> (required) - the maximum number of points used in the computation. Default 0 includes all points.
+            * <b>Inverse Distance Interpolation output</b> (required) - Scalar raster with interpolation result.
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,7 +145,7 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.INPUT_RADIUS,
-                self.tr('Radius. 0 includes all points.'),
+                self.tr('Radius'),
                 defaultValue=0
             )
         )
@@ -139,7 +153,7 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.INPUT_MAXNR,
-                self.tr('Maximum number of closest points. 0 includes all points.'),
+                self.tr('Maximum number of closest points'),
                 defaultValue=0
             )
         )
@@ -172,6 +186,6 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         report(IDW,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_INVERSEDISTANCE] = output_idw
+        results[self.OUTPUT_INVERSEDISTANCE] = outputFilePath
         
         return results

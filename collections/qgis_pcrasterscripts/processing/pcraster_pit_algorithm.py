@@ -92,7 +92,17 @@ class PCRasterPitAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Unique value for each pit cell")
+        return self.tr(
+            """Unique value for each pit cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_pit.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input LDD raster layer</b> (required) - raster layer with LDD data type
+            * <b>Output pit raster layer</b> (required) - nominal raster with unique values for pits
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -112,7 +122,7 @@ class PCRasterPitAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_PIT,
-                self.tr("Output pit layer")
+                self.tr("Output pit raster layer")
             )
         )
 
@@ -132,6 +142,6 @@ class PCRasterPitAlgorithm(QgsProcessingAlgorithm):
         report(PitLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_PIT] = output_pit
+        results[self.OUTPUT_PIT] = outputFilePath
         
         return results

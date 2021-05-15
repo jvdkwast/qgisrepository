@@ -92,7 +92,17 @@ class PCRasterMaptotalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Sum of all cell values.")
+        return self.tr(
+            """Sum of all cell values
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_maptotal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - Raster layer of scalar data type
+            * <b>Output map total raster</b> (required) - scalar raster layer sum of all cell values
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -129,6 +139,6 @@ class PCRasterMaptotalAlgorithm(QgsProcessingAlgorithm):
         report(MapTotalLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_MAPTOTAL] = output_maptotal
+        results[self.OUTPUT_MAPTOTAL] = outputFilePath
         
         return results

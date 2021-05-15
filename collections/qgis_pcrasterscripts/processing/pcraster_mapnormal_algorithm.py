@@ -92,7 +92,17 @@ class PCRasterMapnormalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Cells get non spatial value taken from a normal distribution")
+        return self.tr(
+            """Cells get non spatial value taken from a normal distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_mapnormal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input mask raster layer</b> (required) - Raster layer of any data type with the mask for which the values will be calculated
+            * <b>Output map normal raster</b> (required) - scalar raster layer with value assigned from a normal distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -103,7 +113,7 @@ class PCRasterMapnormalAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_CLONE,
-                self.tr('Clone raster layer')
+                self.tr('Mask raster layer')
             )
         )
 
@@ -130,6 +140,6 @@ class PCRasterMapnormalAlgorithm(QgsProcessingAlgorithm):
         report(MapNormalLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_MAPNORMAL] = output_mapnormal
+        results[self.OUTPUT_MAPNORMAL] = outputFilePath
         
         return results

@@ -92,7 +92,17 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("The area of the area to which a cell belongs.")
+        return self.tr(
+            """The area of the area to which a cell belongs
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areaarea.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Output area raster</b> (required) - Scalar raster with true area (map units)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
         report(AreaLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREA] = output_area
+        results[self.OUTPUT_AREA] = outputFilePath
         
         return results

@@ -92,7 +92,17 @@ class PCRasterStreamOrderAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Calculation the Strahler order from the local drain direction map using PCRaster")
+        return self.tr(
+            """Stream order index of all cells on a local drain direction network
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_streamorder.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input Local Drain Direction layer</b> (required) - raster layer with LDD data type
+            * <b>Output Stream Order raster</b> (required) - ordinal raster with Strahler orders
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -104,7 +114,7 @@ class PCRasterStreamOrderAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_LDD,
-                self.tr('LDD layer')
+                self.tr('Local Drain Direction layer')
             )
         )
 
@@ -131,6 +141,6 @@ class PCRasterStreamOrderAlgorithm(QgsProcessingAlgorithm):
         report(strahler,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_STREAMORDER] = output_streamorder
+        results[self.OUTPUT_STREAMORDER] = outputFilePath
         
         return results

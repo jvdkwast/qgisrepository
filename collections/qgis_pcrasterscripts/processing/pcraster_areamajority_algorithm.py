@@ -93,7 +93,18 @@ class PCRasterAreamajorityAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Most often occurring cell value within an area")
+        return self.tr(
+            """Most often occurring cell value within an area
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areamajority.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input discrete raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Output area raster</b> (required) - Raster of same type as input discrete raster layer containing most often occurring cell value within an area
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterAreamajorityAlgorithm(QgsProcessingAlgorithm):
         report(AreaMajority,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREAMAJORITY] = output_areamajority
+        results[self.OUTPUT_AREAMAJORITY] = outputFilePath
         
         return results

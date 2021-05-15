@@ -90,9 +90,19 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it..
+        parameters and outputs associated with it.
         """
-        return self.tr("Contiguous groups of cells with the same value (clumps)")
+        return self.tr(
+        """Contiguous groups of cells with the same value (‘clumps’)
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_clump.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+             * <b>Input raster layer</b> (required) - Boolean, nominal or ordinal raster layer
+             * <b>Output clump raster layer</b> (required) - nominal raster layer with clumps
+        """
+    )    
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
         report(ClumpResult,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_CLUMP] = output_clump
+        results[self.OUTPUT_CLUMP] = outputFilePath
         
         return results

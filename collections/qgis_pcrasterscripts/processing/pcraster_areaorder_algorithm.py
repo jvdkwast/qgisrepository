@@ -93,7 +93,18 @@ class PCRasterAreaorderAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Within each area ordinal numbers to cells in ascending order")
+        return self.tr(
+            """Within each area ordinal numbers to cells in ascending order
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areaorder.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input ordinal or scalar raster layer</b> ( required) - ordinal or scalar raster layer
+            * <b>Output area normal raster</b> (required) - scalar raster layer order of cells in each class
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterAreaorderAlgorithm(QgsProcessingAlgorithm):
         report(AreaOrderLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREAORDER] = output_areaorder
+        results[self.OUTPUT_AREAORDER] = outputFilePath
         
         return results

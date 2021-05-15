@@ -92,7 +92,17 @@ class PCRasterProfcurvAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Planform curvature calculation using a DEM")
+        return self.tr(
+            """Profile curvature calculation using a DEM
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_profcurv.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM raster layer</b> (required) - raster layer with scalar data type
+            * <b>Output profile curvature layer</b> (required) - scalar raster with the change in slope per distance in horizontal direction, in direction of the slope. It is negative at concave slopes and positive at convex slopes. 
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterProfcurvAlgorithm(QgsProcessingAlgorithm):
         report(ProfCurvLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_PROFCURV] = output_profcurv
+        results[self.OUTPUT_PROFCURV] = outputFilePath
         
         return results

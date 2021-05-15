@@ -94,7 +94,18 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Average of cell values within a specified square neighbourhood")
+        return self.tr(
+            """Average of cell values within a specified square neighbourhood
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_windowaverage.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - scalar raster layer
+            * <b>Input window length</b> (required) - window length value in map units
+            * <b>Output window average layer</b> (required) - Scalar raster with the average value in the window assigned to the cell
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -105,7 +116,7 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,
-                self.tr('Scalar Raster layer')
+                self.tr('Input raster layer')
             )
         )
 
@@ -145,6 +156,6 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
         report(RasterOutput,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results

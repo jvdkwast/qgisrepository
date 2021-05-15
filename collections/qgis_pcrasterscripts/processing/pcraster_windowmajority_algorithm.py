@@ -94,7 +94,18 @@ class PCRasterWindowMajorityAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Most occurring cell value within a specified square neighbourhood")
+        return self.tr(
+            """Most occurring cell value within a specified square neighbourhood
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_windowmajority.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input window length</b> (required) - window length value in map units
+            * <b>Output window diversity layer</b> (required) - Raster with the most occurring cell value within the specified square neighbourhood. Data type same as input raster.
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -105,7 +116,7 @@ class PCRasterWindowMajorityAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,
-                self.tr('Boolean, Nominal or Ordinal Raster layer')
+                self.tr('Input raster layer')
             )
         )
 
@@ -145,6 +156,6 @@ class PCRasterWindowMajorityAlgorithm(QgsProcessingAlgorithm):
         report(RasterOutput,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results

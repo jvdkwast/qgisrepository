@@ -92,7 +92,17 @@ class PCRasterAreauniformAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Value assigned to an area taken from a uniform distribution")
+        return self.tr(
+            """Value assigned to area taken from a uniform distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areauniform.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Output area normal raster</b> (required) - scalar raster layer with value assigned to an area taken from a uniform distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterAreauniformAlgorithm(QgsProcessingAlgorithm):
         report(AreaUniformLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREAUNIFORM] = output_areauniform
+        results[self.OUTPUT_AREAUNIFORM] = outputFilePath
         
         return results

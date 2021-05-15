@@ -92,7 +92,17 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Distance to the first cell downstream")
+        return self.tr(
+            """Distance to the first cell downstream
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_downstreamdist.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Result downstream distance layer</b> (required) - Scalar raster layer with distance in map units to the first cell downstream
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
         report(Distance,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_DOWNSTREAMDIST] = output_downstreamdist
+        results[self.OUTPUT_DOWNSTREAMDIST] = outputFilePath
         
         return results

@@ -90,9 +90,19 @@ class PCRasterrounddownAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Rounding down of cellvalues to whole numbers")
+        return self.tr(
+            """Rounding down of cell values to whole numbers
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_rounddown.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster</b> (required) - scalar raster layer
+            * <b>Output rounddown raster</b> (required) - Scalar raster with result
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterrounddownAlgorithm(QgsProcessingAlgorithm):
         report(rounddownLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

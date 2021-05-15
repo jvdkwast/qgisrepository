@@ -93,7 +93,18 @@ class PCRasterAreaaverageAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Average cell value within an area")
+        return self.tr(
+            """The area of the area to which a cell belongs
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areaaverage.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input scalar raster layer</b> (required) - scalar raster layer
+            * <b>Output area average raster</b> (required) - Scalar raster with average cell value of each class
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterAreaaverageAlgorithm(QgsProcessingAlgorithm):
         report(AreaAverage,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREAAVERAGE] = output_areaaverage
+        results[self.OUTPUT_AREAAVERAGE] = outputFilePath
         
         return results

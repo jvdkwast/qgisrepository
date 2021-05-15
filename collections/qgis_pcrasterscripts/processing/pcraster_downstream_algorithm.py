@@ -93,7 +93,18 @@ class PCRasterDownstreamAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Cell gets value of the neighbouring downstream cell")
+        return self.tr(
+            """Cell gets value of the neighbouring downstream cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_downstream.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Input raster layer</b> (required) - Raster layer of any data type
+            * <b>Result downstream layer</b> (required) - Raster layer with data type of input raster containing value of neighbouring downstream cell
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -104,7 +115,7 @@ class PCRasterDownstreamAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_LDD,
-                self.tr('LDD layer')
+                self.tr('Flow direction layer')
             )
         )
         
@@ -139,6 +150,6 @@ class PCRasterDownstreamAlgorithm(QgsProcessingAlgorithm):
         report(Downstream,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_DOWNSTREAM] = output_downstream
+        results[self.OUTPUT_DOWNSTREAM] = outputFilePath
         
         return results

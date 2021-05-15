@@ -93,7 +93,18 @@ class PCRasterUpstreamAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Sum of the cell values of its first upstream cell(s)")
+        return self.tr(
+            """Sum of the cell values of its first upstream cell(s)
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_upstream.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Input material layer</b> (required) - Scalar raster layer with material values
+            * <b>Result upstream layer</b> (required) - Scalar raster layer with data type of input raster containing the sum of neighbouring upstream cell(s)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterUpstreamAlgorithm(QgsProcessingAlgorithm):
         report(Upstream,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_UPSTREAM] = output_upstream
+        results[self.OUTPUT_UPSTREAM] = outputFilePath
         
         return results

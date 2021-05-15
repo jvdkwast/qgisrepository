@@ -94,7 +94,19 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Friction-distance from the cell under consideration to downstream nearest TRUE cell")
+        return self.tr(
+            """Friction-distance from the cell under consideration to downstream nearest TRUE cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_ldddist.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input Local Drain Direction raster</b> (required) - LDD raster
+            * <b>Raster layer with cells to which distance is calculated</b> (required) - boolean raster layer
+            * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance
+            * <b>Result distance layer</b> (required) - Scalar raster with friction-distance from the cell under consideration to downstream nearest TRUE cell
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -148,6 +160,6 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
         report(LDDDistance,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_LDDDIST] = output_ldddist
+        results[self.OUTPUT_LDDDIST] = outputFilePath
         
         return results

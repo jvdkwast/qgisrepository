@@ -92,7 +92,17 @@ class PCRasterSlopeAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("slope")
+        return self.tr(
+            """Slope of cells using a digital elevation model
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_slope.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM</b> (required) - scalar raster layer
+            * <b>Output slope raster</b> (required) - scalar raster with slope in fraction
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterSlopeAlgorithm(QgsProcessingAlgorithm):
         report(slopeMap,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_SLOPE] = output_slope
+        results[self.OUTPUT_SLOPE] = outputFilePath
         
         return results

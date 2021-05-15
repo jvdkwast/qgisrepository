@@ -92,7 +92,17 @@ class PCRasterDefinedAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Boolean TRUE for non missing values and FALSE for missing values")
+        return self.tr(
+            """Boolean TRUE for non missing values and FALSE for missing values
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_defined.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster</b> (required) - input raster layer of any data type
+            * <b>Output raster</b> (required) - boolean output raster with TRUE for non missing values and FALSE for missing values
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterDefinedAlgorithm(QgsProcessingAlgorithm):
         report(DefinedLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_BOOLEAN] = output_boolean
+        results[self.OUTPUT_BOOLEAN] = outputFilePath
         
         return results

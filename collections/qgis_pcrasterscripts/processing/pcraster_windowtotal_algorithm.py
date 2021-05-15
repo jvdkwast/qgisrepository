@@ -94,7 +94,18 @@ class PCRasterWindowTotalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Sum of values within a specified square neighbourhood")
+        return self.tr(
+            """Sum of values within a specified square neighbourhood
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_windowtotal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - ordinal or scalar raster layer
+            * <b>Input window length</b> (required) - window length value in map units
+            * <b>Output window average layer</b> (required) - raster with the sum of cell values in the window assigned to the cell. Data type same as input raster.
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -145,6 +156,6 @@ class PCRasterWindowTotalAlgorithm(QgsProcessingAlgorithm):
         report(RasterOutput,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results

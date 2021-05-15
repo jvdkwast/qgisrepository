@@ -41,7 +41,7 @@ class PCRasterNormalAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_BOOLEAN = 'INPUT'
-    OUTPUT_NORMAL = 'OUTPUT'
+    OUTPUT = 'OUTPUT'
 
     def tr(self, string):
         """
@@ -92,7 +92,17 @@ class PCRasterNormalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Boolean TRUE cell gets value taken from a normal distribution")
+        return self.tr(
+            """Boolean TRUE cell gets value taken from a normal distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_normal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input boolean raster</b> (required) - Raster layer with boolean data type
+            * <b>Output raster</b> (required) - Scalar raster with values taken from a normal distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -111,7 +121,7 @@ class PCRasterNormalAlgorithm(QgsProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                self.OUTPUT_NORMAL,
+                self.OUTPUT,
                 self.tr("Normal output layer")
             )
         )
@@ -123,15 +133,15 @@ class PCRasterNormalAlgorithm(QgsProcessingAlgorithm):
 
         input_boolean = self.parameterAsRasterLayer(parameters, self.INPUT_BOOLEAN, context)
 
-        output_normal = self.parameterAsRasterLayer(parameters, self.OUTPUT_NORMAL, context)
+        output_normal = self.parameterAsRasterLayer(parameters, self.OUTPUT, context)
         setclone(input_boolean.dataProvider().dataSourceUri())
         InputBoolean = readmap(input_boolean.dataProvider().dataSourceUri())
         NormalLayer = normal(InputBoolean)
-        outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_NORMAL, context)
+        outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT, context)
 
         report(NormalLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_NORMAL] = output_normal
+        results[self.OUTPUT] = outputFilePath
         
         return results

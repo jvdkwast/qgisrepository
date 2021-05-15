@@ -92,7 +92,17 @@ class PCRasterMapmaximumAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Maximum cell value")
+        return self.tr(
+            """Maximum cell value
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_mapmaximum.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - ordinal or scalar raster layer
+            * <b>Output maximum value raster</b> (required) - Raster of same type as input containing the maximum cell value
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterMapmaximumAlgorithm(QgsProcessingAlgorithm):
         report(MaxLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_MAX] = output_max
+        results[self.OUTPUT_MAX] = outputFilePath
         
         return results

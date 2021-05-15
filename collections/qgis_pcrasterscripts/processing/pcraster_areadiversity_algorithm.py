@@ -93,7 +93,18 @@ class PCRasterAreadiversityAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Number of unique cell values within an area")
+        return self.tr(
+            """Number of unique cell values within an area
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areadiversity.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input discrete raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Output area raster</b> (required) - Scalar raster with number of unique cell values within an area
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterAreadiversityAlgorithm(QgsProcessingAlgorithm):
         report(AreaDiversity,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREADIVERSITY] = output_areadiversity
+        results[self.OUTPUT_AREADIVERSITY] = outputFilePath
         
         return results

@@ -92,7 +92,17 @@ class PCRasterPlancurvAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Planform curvature calculation using a DEM")
+        return self.tr(
+            """Planform curvature calculation using a DEM
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_plancurv.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM raster layer</b> (required) - raster layer with scalar data type
+            * <b>Output planform curvature layer</b> (required) - scalar raster with the change in slope per distance in horizontal direction, in direction of the slope. It is negative at concave slopes and positive at convex slopes. 
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -112,7 +122,7 @@ class PCRasterPlancurvAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_PLANCURV,
-                self.tr("Output plaform curvature layer")
+                self.tr("Output planform curvature layer")
             )
         )
 
@@ -132,6 +142,6 @@ class PCRasterPlancurvAlgorithm(QgsProcessingAlgorithm):
         report(PlanCurvLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_PLANCURV] = output_plancurv
+        results[self.OUTPUT_PLANCURV] = outputFilePath
         
         return results

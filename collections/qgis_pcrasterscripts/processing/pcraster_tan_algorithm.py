@@ -90,9 +90,19 @@ class PCRastertanAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Tangent")
+        return self.tr(
+            """Tangent
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_tan.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster</b> (required) - directional or scalar raster layer
+            * <b>Output raster</b> (required) - tangent result layer with data type of input raster
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRastertanAlgorithm(QgsProcessingAlgorithm):
         report(tanLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

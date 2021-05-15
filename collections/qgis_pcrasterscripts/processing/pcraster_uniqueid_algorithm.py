@@ -92,7 +92,17 @@ class PCRasterUniqueidAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Unique whole value for each Boolean TRUE cell")
+        return self.tr(
+            """Unique whole value for each Boolean TRUE cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_uniqueid.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input boolean raster layer</b> (required) - Raster layer with boolean data type
+            * <b>Output unique id raster</b> (required) - Scalar raster with unique id's for TRUE cells in the input boolean raster
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -111,7 +121,7 @@ class PCRasterUniqueidAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_SCALAR,
-                self.tr("Output scalar raster with unique id's")
+                self.tr("Output unique id raster")
             )
         )
 
@@ -131,6 +141,6 @@ class PCRasterUniqueidAlgorithm(QgsProcessingAlgorithm):
         report(ID,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_SCALAR] = output_scalar
+        results[self.OUTPUT_SCALAR] = outputFilePath
         
         return results

@@ -97,7 +97,21 @@ class PCRasterLDDCreateDEMAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Modified digital elevation model where sinks are filled")
+        return self.tr(
+            """Modified digital elevation model
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lddcreatedem.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM layer</b> (required) - scalar raster layer
+            * <b>Outflow depth value</b> (required) - outflow depth
+            * <b>Core volume value</b> (required) - core volume
+            * <b>Core area value</b> (required) - core area
+            * <b>Catchment precipitation</b> (required) - catchment precipitation
+            * <b>Local drain direction layer output</b> (required) - raster with local drain direction (ldd data type)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -172,6 +186,6 @@ class PCRasterLDDCreateDEMAlgorithm(QgsProcessingAlgorithm):
         report(DEMFilled,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_DEMFILLED] = output_demfilled
+        results[self.OUTPUT_DEMFILLED] = outputFilePath
         
         return results

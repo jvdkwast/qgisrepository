@@ -92,7 +92,17 @@ class PCRasterAreanormalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Value assigned to an area taken from a normal distribution")
+        return self.tr(
+            """Value assigned to an area taken from a normal distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areanormal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Output area normal raster</b> (required) - scalar raster layer with value assigned to an area taken from a normal distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterAreanormalAlgorithm(QgsProcessingAlgorithm):
         report(AreaNormalLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREANORMAL] = output_areanormal
+        results[self.OUTPUT_AREANORMAL] = outputFilePath
         
         return results

@@ -90,9 +90,19 @@ class PCRasterAcosAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Inverse cosine")
+        return self.tr(
+            """Inverse cosine
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_acos.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster</b> (required) - scalar raster layer
+            * <b>Output raster</b> (required) - Scalar raster with result
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterAcosAlgorithm(QgsProcessingAlgorithm):
         report(acosLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

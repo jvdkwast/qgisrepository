@@ -94,7 +94,18 @@ class PCRasterWindowHighPassAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Increases spatial frequency within a specified square neighbourhood")
+        return self.tr(
+            """Increases spatial frequency within a specified square neighbourhood
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_windowhighpass.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - scalar raster layer
+            * <b>Input window length</b> (required) - window length value in map units
+            * <b>Output window high pass layer</b> (required) - Scalar raster with high pass values
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -145,6 +156,6 @@ class PCRasterWindowHighPassAlgorithm(QgsProcessingAlgorithm):
         report(RasterOutput,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results

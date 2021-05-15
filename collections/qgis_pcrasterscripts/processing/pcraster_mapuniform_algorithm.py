@@ -92,7 +92,17 @@ class PCRasterMapuniformAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Cells get non spatial value taken from a uniform distribution")
+        return self.tr(
+            """Cells get non spatial value taken from an uniform distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_mapuniform.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input mask raster layer</b> (required) - Raster layer of any data type with the mask for which the values will be calculated
+            * <b>Output uniform raster</b> (required) - scalar raster layer with value assigned from a uniform distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -103,7 +113,7 @@ class PCRasterMapuniformAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_CLONE,
-                self.tr('Clone raster layer')
+                self.tr('Mask raster layer')
             )
         )
 
@@ -130,6 +140,6 @@ class PCRasterMapuniformAlgorithm(QgsProcessingAlgorithm):
         report(MapUniformLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_MAPUNIFORM] = output_mapuniform
+        results[self.OUTPUT_MAPUNIFORM] = outputFilePath
         
         return results

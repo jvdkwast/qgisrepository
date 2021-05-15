@@ -93,7 +93,18 @@ class PCRasterViewAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("TRUE or FALSE value for visibility from viewpoint(s) defined by a digital elevation model")
+        return self.tr(
+            """TRUE or FALSE value for visibility from viewpoint(s) defined by a digital elevation model
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_view.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM layer</b> (required) - Scalar raster with elevations
+            * <b>Viewpoints layer</b> (required) - Boolean raster layer. All cells with value TRUE are used as viewpoints
+            * <b>Result viewshed layer</b> (required) - Boolean raster layer with TRUE for each cell which is visible from viewpoints and FALSE for cells that are not visible.
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -112,7 +123,7 @@ class PCRasterViewAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_POINTS,
-                self.tr('Boolean viewpoints layer')
+                self.tr('Viewpoints layer')
             )
         )
 
@@ -139,6 +150,6 @@ class PCRasterViewAlgorithm(QgsProcessingAlgorithm):
         report(Viewshed,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_VIEW] = output_view
+        results[self.OUTPUT_VIEW] = outputFilePath
         
         return results

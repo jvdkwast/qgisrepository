@@ -92,7 +92,24 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it.
         """
-        return self.tr("Area of one cell")
+        return self.tr(
+        """Area of one cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_cellarea.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+             * <b>Input raster layer</b> (required) - raster layer for which the cell area will be calculated
+             * <b>Output cell area layer</b> (required) - where the results will be saved.
+             
+            Results:
+            
+             * OUTPUT_RASTER
+        """
+    )
+        
+    def helpUrl(self):
+        return "https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_cellarea.html"
 
     def initAlgorithm(self, config=None):
         """
@@ -115,6 +132,8 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Output cellarea layer")
             )
         )
+        
+        
 
     def processAlgorithm(self, parameters, context, feedback):
         """
@@ -132,6 +151,6 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
         report(cellareaLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

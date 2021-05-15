@@ -90,9 +90,19 @@ class PCRasterpredAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Ordinal number of the next lower ordinal class")
+        return self.tr(
+            """Ordinal number of the next lower ordinal class
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_pred.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Ordinal raster layer</b> (required)
+            * <b>Output raster</b> (required) - Ordinal raster with result
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterpredAlgorithm(QgsProcessingAlgorithm):
         report(predLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

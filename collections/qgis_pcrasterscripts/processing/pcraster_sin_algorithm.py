@@ -90,9 +90,19 @@ class PCRastersinAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Sine")
+        return self.tr(
+            """Sine
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_sin.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster</b> (required) - directional or scalar raster layer
+            * <b>Output raster</b> (required) - sine result layer with data type of input raster
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRastersinAlgorithm(QgsProcessingAlgorithm):
         report(sinLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

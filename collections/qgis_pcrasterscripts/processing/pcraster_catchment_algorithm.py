@@ -93,7 +93,18 @@ class PCRasterCatchmentAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("The local drain direction for each cell is defined by ldd. For each non zero value on points its catchment is determined and all cells in its catchment are assigned this non zero value. This procedure is performed for all cells with a non zero value on points, but there is one important exception: subcatchments are not identified: if the catchment of a non zero cell on points is a part of another (larger) catchment of a non zero cell on points, the cells in this smaller subcatchment are assigned the value of the larger enclosing catchment. The operation is performed as follows: for each cell its downstream path is determined which consists of the consecutively neighbouring downstream cells on ldd. On Result each cell is assigned the non zero points cell value which is on its path and which is most far downstream. If all cells on the downstream path of a cell have a value 0 on points a 0 is assigned to the cell on Result. ")
+        return self.tr(
+            """Catchment(s) of one or more specified cells
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_catchment.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Input outlet raster</b> (required) - Boolean, nominal or ordinal raster with outlet locations
+            * <b>Result catchment layer</b> (required) - Raster with same data type as outlet raster containing catchment(s)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,7 +142,7 @@ class PCRasterCatchmentAlgorithm(QgsProcessingAlgorithm):
         input_ldd = self.parameterAsRasterLayer(parameters, self.INPUT_LDD, context)
         input_outlet = self.parameterAsRasterLayer(parameters, self.INPUT_OUTLET, context)
         output_catchment = self.parameterAsRasterLayer(parameters, self.OUTPUT_CATCHMENT, context)
-        seclone(input_ldd.dataProvider().dataSourceUri())
+        setclone(input_ldd.dataProvider().dataSourceUri())
         LDD = readmap(input_ldd.dataProvider().dataSourceUri())
         Outlets = readmap(input_outlet.dataProvider().dataSourceUri())
         CatchmentOfOutlets = catchment(LDD,Outlets)
@@ -139,6 +150,6 @@ class PCRasterCatchmentAlgorithm(QgsProcessingAlgorithm):
         report(CatchmentOfOutlets,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_CATCHMENT] = output_catchment
+        results[self.OUTPUT_CATCHMENT] = outputFilePath
         
         return results

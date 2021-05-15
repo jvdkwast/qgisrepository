@@ -95,7 +95,19 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Total friction of the shortest accumulated friction path over a map with friction values from a source cell to cell under consideration.")
+        return self.tr(
+            """Total friction of the shortest accumulated friction path over a map with friction values from a source cell to cell under consideration
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spread.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Points raster</b> (required) - boolean, nominal or ordinal raster layer with cells from which the shortest accumulated friction path to every cell centre is calculated
+            * <b>Initial friction layer</b> (required) - initial friction at start of spreading, scalar data type
+            * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance, scalar data type
+            * <b>Result distance layer</b> (required) - Scalar raster with shortest accumulated friction path to every cell centre in map units, scalar data type
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -106,7 +118,7 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_POINTS,
-                self.tr('Raster layer with values to be interpolated')
+                self.tr('Points raster')
             )
         )
         
@@ -150,6 +162,6 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
         report(SpreadLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_SPREAD] = output_spread
+        results[self.OUTPUT_SPREAD] = outputFilePath
         
         return results

@@ -93,7 +93,18 @@ class PCRasterAreatotalAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Sum of cell values within an area")
+        return self.tr(
+            """Sum of cell values within an area
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areatotal.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Input scalar raster layer</b> ( required) - scalar raster layer
+            * <b>Output area normal raster</b> (required) - scalar raster layer with sum of cell values within an area
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -111,7 +122,7 @@ class PCRasterAreatotalAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,
-                self.tr('Input raster layer')
+                self.tr('Input scalar raster layer')
             )
         )
 
@@ -139,6 +150,6 @@ class PCRasterAreatotalAlgorithm(QgsProcessingAlgorithm):
         report(AreaTotalLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREATOTAL] = output_areatotal
+        results[self.OUTPUT_AREATOTAL] = outputFilePath
         
         return results

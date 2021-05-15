@@ -92,7 +92,17 @@ class PCRasterUniformAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Boolean TRUE cell gets value from an uniform distribution")
+        return self.tr(
+            """Boolean TRUE cell gets value from an uniform distribution
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_uniform.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input boolean raster</b> (required) - Raster layer with boolean data type
+            * <b>Output raster</b> (required) - Scalar raster with values taken from a uniform distribution
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterUniformAlgorithm(QgsProcessingAlgorithm):
         report(UniformLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_UNIFORM] = output_uniform
+        results[self.OUTPUT_UNIFORM] = outputFilePath
         
         return results

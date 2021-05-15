@@ -90,9 +90,19 @@ class PCRasterlddrepairAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it.
+        parameters and outputs associated with it..
         """
-        return self.tr("Reparation of unsound local drain direction map")
+        return self.tr(
+            """Reparation of unsound local drain direction map
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lddrepair.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input LDD raster layer</b> (required) - unsound local drain direction raster (LDD data type)
+            * <b>Output lddrepair layer</b> (required) - sound local drain direction raster (LDD data type)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -132,6 +142,6 @@ class PCRasterlddrepairAlgorithm(QgsProcessingAlgorithm):
         report(lddrepairLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
 
         return results

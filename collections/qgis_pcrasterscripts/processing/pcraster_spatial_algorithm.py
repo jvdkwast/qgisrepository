@@ -96,7 +96,19 @@ class PCRasterSpatialAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Conversion of a non-spatial value to a spatial data type.")
+        return self.tr(
+            """Conversion of a non-spatial value to a spatial data type.
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spatial.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input nonspatial</b> (required) - value to be assigned to cells in mask layer
+            * <b>Output data type</b> (required) - data type of output raster
+            * <b>Mask layer</b> - value of input nonspatial will be assigned to all values in mask layer (any data type)
+            * <b>Output raster</b> (required) - raster with result in chosen data type
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -104,7 +116,7 @@ class PCRasterSpatialAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
         
-        self.addParameter(     
+        self.addParameter(
             QgsProcessingParameterNumber(
                 self.INPUT_NONSPATIAL,
                 self.tr('Input nonspatial'),
@@ -126,7 +138,7 @@ class PCRasterSpatialAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_CLONE,
-                self.tr('Clone layer')
+                self.tr('Mask layer')
             )
         )
         
@@ -168,6 +180,6 @@ class PCRasterSpatialAlgorithm(QgsProcessingAlgorithm):
         report(SpatialResult,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results

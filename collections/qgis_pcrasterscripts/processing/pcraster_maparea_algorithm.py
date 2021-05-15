@@ -92,7 +92,17 @@ class PCRasterMapareaAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Total map area in map units.    ")
+        return self.tr(
+            """Total map area
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_maparea.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input raster layer</b> (required) - raster layer of any data type
+            * <b>Output area raster</b> (required) - Scalar raster with true area (map units)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -131,6 +141,6 @@ class PCRasterMapareaAlgorithm(QgsProcessingAlgorithm):
         report(AreaLayer,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_AREA] = output_area
+        results[self.OUTPUT_AREA] = outputFilePath
         
         return results

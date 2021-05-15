@@ -93,7 +93,18 @@ class PCRasterAccuFluxAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("This operation calculates for each cell the accumulated amount of material that flows out of the cell into its neighbouring downstream cell. This accumulated amount is the amount of material in the cell itself plus the amount of material in upstream cells of the cell. For each cell, the following procedure is performed: using the local drain direction network on ldd, the catchment of a cell its outflow is determined which is made up the cell itself and all cells that drain to the cell (i.e. which are in upstream direction of the cell). The material values of all cells in the catchment are summed and send to the cell on Resultflux. This value is the amount of material which accumulates during transport in downstream direction to the outflow of the cell.")
+        return self.tr(
+            """Accumulated material flowing into downstream cell
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_accuflux.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Input material raster</b> (required) - Scalar raster with material (>= 0)
+            * <b>Result flux layer</b> (required) - Scalar raster with accumulated amount of material
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -139,6 +150,6 @@ class PCRasterAccuFluxAlgorithm(QgsProcessingAlgorithm):
         report(ResultFlux,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_ACCUFLUX] = output_accuflux
+        results[self.OUTPUT_ACCUFLUX] = outputFilePath
         
         return results

@@ -97,7 +97,21 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Local drain direction map with flow directions from each cell to its steepest downslope neighbour")
+        return self.tr(
+            """Local drain direction map with flow directions from each cell to its steepest downslope neighbour
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lddcreate.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input DEM layer</b> (required) - scalar raster layer
+            * <b>Outflow depth value</b> (required) - outflow depth
+            * <b>Core volume value</b> (required) - core volume
+            * <b>Core area value</b> (required) - core area
+            * <b>Catchment precipitation</b> (required) - catchment precipitation
+            * <b>Local drain direction layer output</b> (required) - raster with local drain direction (ldd data type)
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
@@ -175,6 +189,6 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
         report(LDD,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_LDD] = output_ldd
+        results[self.OUTPUT_LDD] = outputFilePath
         
         return results
