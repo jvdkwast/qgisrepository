@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingException,
                        QgsProcessingAlgorithm,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterDestination
                        )
 from qgis import processing
@@ -42,6 +43,7 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_RASTER = 'INPUT'
+    INPUT_DATATYPE = 'INPUT2'
     OUTPUT_PCRASTER = 'OUTPUT'
 
     def tr(self, string):
@@ -61,14 +63,14 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'Convert to PCRaster format'
+        return 'Convert to PCRaster Format'
 
     def displayName(self):
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
-        return self.tr('Convert to PCRaster format')
+        return self.tr('Convert to PCRaster Format')
 
     def group(self):
         """
@@ -93,7 +95,7 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("The local drain direction for each cell is defined by ldd. For each non zero value on points its catchment is determined and all cells in its catchment are assigned this non zero value. This procedure is performed for all cells with a non zero value on points, but there is one important exception: subcatchments are not identified: if the catchment of a non zero cell on points is a part of another (larger) catchment of a non zero cell on points, the cells in this smaller subcatchment are assigned the value of the larger enclosing catchment. The operation is performed as follows: for each cell its downstream path is determined which consists of the consecutively neighbouring downstream cells on ldd. On Result each cell is assigned the non zero points cell value which is on its path and which is most far downstream. If all cells on the downstream path of a cell have a value 0 on points a 0 is assigned to the cell on Result. ")
+        return self.tr("Convert GDAL supported raster layers to PCRaster format with control of the output data type")
 
     def initAlgorithm(self, config=None):
         """
@@ -108,7 +110,17 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
-        # We add a feature sink in which to store our processed features (this
+        self.datatypes = [self.tr('Boolean'),self.tr('Nominal'),self.tr('Ordinal'),self.tr('Scalar'),self.tr('Directional'),self.tr('LDD')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_DATATYPE,
+                self.tr('Output data type'),
+                self.datatypes,
+                defaultValue=0
+            )
+        ) 
+
+ # We add a feature sink in which to store our processed features (this
         # usually takes the form of a newly created vector layer when the
         # algorithm is run in QGIS).
         self.addParameter(
@@ -131,7 +143,20 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
     
     	#GDAL Translate
         dst_filename = self.parameterAsOutputLayer(parameters, self.OUTPUT_PCRASTER, context)
-        dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Float32, metadataOptions="VS_SCALAR")
+        
+        input_datatype = self.parameterAsEnum(parameters, self.INPUT_DATATYPE, context)
+        if input_datatype == 0:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Byte, metadataOptions="VS_BOOLEAN")
+        elif input_datatype == 1:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Int32, metadataOptions="VS_NOMINAL")
+        elif input_datatype == 2:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Int32, metadataOptions="VS_ORDINAL")
+        elif input_datatype == 3:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Float32, metadataOptions="VS_SCALAR")
+        elif input_datatype == 4:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Float32, metadataOptions="VS_DIRECTION")
+        else:
+            dst_ds = gdal.Translate(dst_filename, src_ds, format='PCRaster', outputType=gdalconst.GDT_Byte, metadataOptions="VS_LDD")
     
     	#Properly close the datasets to flush to disk
         dst_ds = None
