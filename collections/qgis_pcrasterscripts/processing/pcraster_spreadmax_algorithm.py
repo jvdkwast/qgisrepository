@@ -165,7 +165,7 @@ class PCRasterSpreadmaxAlgorithm(QgsProcessingAlgorithm):
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         input_max = self.parameterAsDouble(parameters, self.INPUT_MAX, context)
         output_spread = self.parameterAsRasterLayer(parameters, self.OUTPUT_SPREAD, context)
-        setclone(input_ldd.dataProvider().dataSourceUri())
+        setclone(input_points.dataProvider().dataSourceUri())
         PointsLayer = readmap(input_points.dataProvider().dataSourceUri())
         InitialFriction = readmap(input_initial.dataProvider().dataSourceUri())
         Friction = readmap(input_friction.dataProvider().dataSourceUri())
