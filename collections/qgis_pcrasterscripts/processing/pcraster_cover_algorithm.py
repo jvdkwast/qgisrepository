@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterMultipleLayers,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -94,14 +95,14 @@ class PCRasterCoverAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Missing values substituted for values from another raster (only one supported)
+            """Missing values substituted for values from other raster(s)
             
             <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_cover.html">PCRaster documentation</a>
             
             Parameters:
             
             * <b>Input raster</b> (required) - Raster layer of any data type
-            * <b>Input cover raster<b> (required) - Raster layer of same data type as input raster
+            * <b>Input cover raster</b> (required) - Raster layer(s) of same data type as input raster
             * <b>Output raster</b> (required) - Raster with result of same data type as input
             """
         )
@@ -120,11 +121,13 @@ class PCRasterCoverAlgorithm(QgsProcessingAlgorithm):
         )
         
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
+            QgsProcessingParameterMultipleLayers(
                 self.INPUT_COVER,
-                self.tr('Input Cover layer')
-            )
+                self.tr('Input Cover Layer(s)'),
+                QgsProcessing.TypeRaster
+           )
         )
+
 
 
         self.addParameter(
@@ -140,12 +143,13 @@ class PCRasterCoverAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
-        input_cover = self.parameterAsRasterLayer(parameters, self.INPUT_COVER, context)
+        input_cover = [l.source() for l in self.parameterAsLayerList(parameters, self.INPUT_COVER, context)]
+        #input_cover = self.parameterAsFileList(parameters, self.INPUT_COVER, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())
         InputRaster = readmap(input_raster.dataProvider().dataSourceUri())
-        coverLayer = readmap(input_cover.dataProvider().dataSourceUri())
-        resultLayer = cover(InputRaster,coverLayer)
+        #coverLayer = readmap(input_cover.dataProvider().dataSourceUri())
+        resultLayer = cover(InputRaster,*input_cover)
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 
         report(resultLayer,outputFilePath)

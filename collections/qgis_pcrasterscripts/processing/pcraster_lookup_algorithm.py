@@ -44,8 +44,7 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    #INPUT_RASTERS = 'INPUT'
-    INPUT_RASTER = 'INPUT'
+    INPUT_RASTERS = 'INPUT'
     INPUT_TABLE = 'INPUT1'
     INPUT_DATATYPE = 'INPUT2'
     OUTPUT_RASTER = 'OUTPUT'
@@ -99,19 +98,7 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr(
-            """Compares cell value(s) of one or more expression(s) with the search key in a table
-            
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lookup.html">PCRaster documentation</a>
-            
-            Parameters:
-            
-            * <b>Input raster layer</b> (required) - Raster layer of any data type. Currently only one raster input is supported.
-            * <b>Input lookup table</b> (required) - ASCII text table in PCRaster column table format
-            * <b>Output data type</b> (required) - Choose data type of output raster layer
-            * <b>Output raster layer</b> (required) - Output raster layer with chosen data type
-            """
-        )
+        return self.tr("Compares cell value(s) of one or more expression(s) with the search key in a table")
 
     def initAlgorithm(self, config=None):
         """
@@ -119,19 +106,14 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                self.INPUT_RASTER,
-                self.tr('Input raster layer')
-            )
-        )
 
-#        self.addParameter(
-#            QgsProcessingParameterMultipleLayers(
-#                self.INPUT_RASTERS,
-#                self.tr('Input Raster Layer(s)')
-#           )
-#        )
+        self.addParameter(
+            QgsProcessingParameterMultipleLayers(
+                self.INPUT_RASTERS,
+                self.tr('Input Raster Layer(s)'),
+                QgsProcessing.TypeRaster
+           )
+        )
 
         self.addParameter(
             QgsProcessingParameterFile(
@@ -139,7 +121,6 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Input lookup table')
             )
         )
-
         
         self.datatypes = [self.tr('Boolean'),self.tr('Nominal'),self.tr('Ordinal'),self.tr('Scalar'),self.tr('Directional'),self.tr('LDD')]
         self.addParameter(
@@ -157,35 +138,40 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Output Raster Layer')
             )
         )
-
+                
+    
     def processAlgorithm(self, parameters, context, feedback):
         """
         Here is where the processing itself takes place.
         """
 
-        #input_rasters = self.parameterAsFileList(parameters, self.INPUT_RASTERS, context)
-        input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
+        input_rasters = [l.source() for l in self.parameterAsLayerList(parameters, self.INPUT_RASTERS, context)]
         input_lookuptable = self.parameterAsFile(parameters, self.INPUT_TABLE, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
+        #firstRaster = readmap(input_rasters[0])
+        #secondRaster = readmap(input_rasters[1])
+        
+           
+        #rasterlistasstring = ",".join(f'"{rasterpath}"' for rasterpath in input_rasters)
         #filelist = input_rasters.dataProvider().dataSourceUri()
-        setclone(input_raster.dataProvider().dataSourceUri())
+        setclone(input_rasters[0])
         #lookuptable = input_lookuptable
-        rasterlayer = readmap(input_raster.dataProvider().dataSourceUri())
+        #rasterlayer = readmap(input_rasters.dataProvider().dataSourceUri())
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 
         input_datatype = self.parameterAsEnum(parameters, self.INPUT_DATATYPE, context)
         if input_datatype == 0:
-            Result = lookupboolean(input_lookuptable,rasterlayer)
+            Result = lookupboolean(input_lookuptable,*input_rasters)
         elif input_datatype == 1:
-            Result = lookupnominal(input_lookuptable,rasterlayer)
+            Result = lookupnominal(input_lookuptable,*input_rasters)
         elif input_datatype == 2:
-            Result = lookupordinal(input_lookuptable,rasterlayer)
+            Result = lookupordinal(input_lookuptable,*input_rasters)
         elif input_datatype == 3:
-            Result = lookupscalar(input_lookuptable,rasterlayer)
+            Result = lookupscalar(input_lookuptable,*input_rasters)
         elif input_datatype == 4:
-            Result = lookupdirectional(input_lookuptable,rasterlayer)
+            Result = lookupdirectional(input_lookuptable,*input_rasters)
         else:
-            Result = lookupldd(input_lookuptable,rasterlayer)
+            Result = lookupldd(input_lookuptable,*input_rasters)
         
         report(Result,outputFilePath)
 
