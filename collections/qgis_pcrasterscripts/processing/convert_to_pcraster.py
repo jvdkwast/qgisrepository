@@ -63,7 +63,7 @@ class ConvertToPCRasterAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'Convert to PCRaster Format'
+        return 'converttopcrasterformat'
 
     def displayName(self):
         """
