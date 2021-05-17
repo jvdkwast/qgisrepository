@@ -17,16 +17,12 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
-                       QgsProcessingParameterRasterLayer,
-                       QgsProcessingParameterFile,
-                       QgsProcessingParameterEnum,
-                       QgsProcessingParameterNumber,
-                       QgsProcessingParameterMultipleLayers)
+                       QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
 
 
-class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
+class PCRasterAccutraveltimefluxAlgorithm(QgsProcessingAlgorithm):
     """
     This is an example algorithm that takes a vector layer and
     creates a new identical one.
@@ -44,10 +40,11 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    INPUT_RASTERS = 'INPUT'
-    INPUT_TABLE = 'INPUT1'
-    INPUT_DATATYPE = 'INPUT2'
-    OUTPUT_RASTER = 'OUTPUT'
+    INPUT_FLOWDIRECTION = 'INPUT'
+    INPUT_MATERIAL = 'INPUT2'
+    INPUT_VELOCITY = 'INPUT3'
+    OUTPUT_FLUX = 'OUTPUT'
+    OUTPUT_STATE = 'OUTPUT2'
 
     def tr(self, string):
         """
@@ -56,7 +53,7 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return PCRasterLookupAlgorithm()
+        return PCRasterAccutraveltimefluxAlgorithm()
 
     def name(self):
         """
@@ -66,14 +63,14 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'lookup'
+        return 'accutraveltimeflux'
 
     def displayName(self):
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
-        return self.tr('lookup')
+        return self.tr('accutraveltimeflux and accutraveltimestate')
 
     def group(self):
         """
@@ -99,16 +96,17 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Compares cell value(s) of one or more expression(s) with the search key in a table
+            """Transports material downstream over a distance dependent on a given velocity.
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lookup.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_accutraveltime.html">PCRaster documentation</a>
             
             Parameters:
             
-            * <b>Input Raster layers</b> (required) - rasters layer from any data type
-            * <b>Input lookup table</b> (required) - lookup table in ASCII text format. Nr of columns is number of input rasters plus one.
-            * <b>Output data type</b> (required) - data type of output raster
-            * <b>Output raster layer</b> (required) - raster layer with result of the lookup in output data type
+            * <b>Input flow direction raster</b> (required) - Flow direction in PCRaster LDD format (see lddcreate)
+            * <b>Input material raster</b> (required) - Scalar raster with amount of material input (>= 0)
+            * <b>Input velocity raster</b> (required) - Scalar raster with the distance per time step in map units (>=0)
+            * <b>Output Flux raster</b> (required) - Scalar raster with result flux of material
+            * <b>Output State raster</b> (required) - Scalar raster with result state of stored material
             """
         )
 
@@ -118,70 +116,66 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-
         self.addParameter(
-            QgsProcessingParameterMultipleLayers(
-                self.INPUT_RASTERS,
-                self.tr('Input Raster Layer(s)'),
-                QgsProcessing.TypeRaster
-           )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterFile(
-                self.INPUT_TABLE,
-                self.tr('Input lookup table')
+            QgsProcessingParameterRasterLayer(
+                self.INPUT_FLOWDIRECTION,
+                self.tr('Input Flow Direction Raster Layer')
             )
         )
         
-        self.datatypes = [self.tr('Boolean'),self.tr('Nominal'),self.tr('Ordinal'),self.tr('Scalar'),self.tr('Directional'),self.tr('LDD')]
         self.addParameter(
-            QgsProcessingParameterEnum(
-                self.INPUT_DATATYPE,
-                self.tr('Output data type'),
-                self.datatypes,
-                defaultValue=0
+            QgsProcessingParameterRasterLayer(
+                self.INPUT_MATERIAL,
+                self.tr('Input Material Raster Layer')
+            )
+        )
+        
+        self.addParameter(
+            QgsProcessingParameterRasterLayer(
+                self.INPUT_VELOCITY,
+                self.tr('Input Velocity Raster Layer')
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterRasterDestination(
+                self.OUTPUT_FLUX,
+                self.tr('Output Material Flux Raster Layer')
             )
         )
         
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                self.OUTPUT_RASTER,
-                self.tr('Output Raster Layer')
+                self.OUTPUT_STATE,
+                self.tr('Output State Raster Layer')
             )
         )
-                
-    
+
     def processAlgorithm(self, parameters, context, feedback):
         """
         Here is where the processing itself takes place.
         """
 
-        input_rasters = []
-        for l in self.parameterAsLayerList(parameters, self.INPUT_RASTERS, context):
-            input_rasters.append(l.source())
-        input_lookuptable = self.parameterAsFile(parameters, self.INPUT_TABLE, context)
-        output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
-        setclone(input_rasters[0])
-        outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
-
-        input_datatype = self.parameterAsEnum(parameters, self.INPUT_DATATYPE, context)
-        if input_datatype == 0:
-            Result = lookupboolean(input_lookuptable,*input_rasters)
-        elif input_datatype == 1:
-            Result = lookupnominal(input_lookuptable,*input_rasters)
-        elif input_datatype == 2:
-            Result = lookupordinal(input_lookuptable,*input_rasters)
-        elif input_datatype == 3:
-            Result = lookupscalar(input_lookuptable,*input_rasters)
-        elif input_datatype == 4:
-            Result = lookupdirectional(input_lookuptable,*input_rasters)
-        else:
-            Result = lookupldd(input_lookuptable,*input_rasters)
+        input_flowdirection = self.parameterAsRasterLayer(parameters, self.INPUT_FLOWDIRECTION, context)
+        input_material = self.parameterAsRasterLayer(parameters, self.INPUT_MATERIAL, context)
+        input_velocity = self.parameterAsRasterLayer(parameters, self.INPUT_VELOCITY, context)
+        output_flux = self.parameterAsRasterLayer(parameters, self.OUTPUT_FLUX, context)
+        output_state = self.parameterAsRasterLayer(parameters, self.OUTPUT_STATE, context)
+        setclone(input_flowdirection.dataProvider().dataSourceUri())
+        LDD = readmap(input_flowdirection.dataProvider().dataSourceUri())
+        material = readmap(input_material.dataProvider().dataSourceUri())
+        transportvelocity = readmap(input_velocity.dataProvider().dataSourceUri())
+        resultflux = accutraveltimeflux(LDD, material, transportvelocity)
+        resultstate = accutraveltimestate(LDD, material, transportvelocity)
         
-        report(Result,outputFilePath)
+        outputFlux = self.parameterAsOutputLayer(parameters, self.OUTPUT_FLUX, context)
+        outputState = self.parameterAsOutputLayer(parameters, self.OUTPUT_STATE, context)
+
+        report(resultflux,outputFlux)
+        report(resultstate,outputState)
 
         results = {}
-        results[self.OUTPUT_RASTER] = outputFilePath
+        results[self.OUTPUT_FLUX] = outputFlux
+        results[self.OUTPUT_STATE] = outputState
         
         return results

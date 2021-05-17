@@ -143,7 +143,10 @@ class PCRasterCoverAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
-        input_cover = [l.source() for l in self.parameterAsLayerList(parameters, self.INPUT_COVER, context)]
+        input_cover = []
+        for l in self.parameterAsLayerList(parameters, self.INPUT_COVER, context):
+            input_cover.append(l.source())
+        
         #input_cover = self.parameterAsFileList(parameters, self.INPUT_COVER, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())

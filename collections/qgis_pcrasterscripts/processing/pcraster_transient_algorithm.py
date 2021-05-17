@@ -17,12 +17,13 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterNumber,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
 
 
-class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
+class PCRasterTransientAlgorithm(QgsProcessingAlgorithm):
     """
     This is an example algorithm that takes a vector layer and
     creates a new identical one.
@@ -40,11 +41,14 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    INPUT_FLOWDIRECTION = 'INPUT'
-    INPUT_MATERIAL = 'INPUT2'
-    INPUT_CAPACITY = 'INPUT3'
-    OUTPUT_FLUX = 'OUTPUT'
-    OUTPUT_STATE = 'OUTPUT2'
+    INPUT_ELEVATION = 'INPUT'
+    INPUT_RECHARGE = 'INPUT2'
+    INPUT_TRANSMISSIVITY = 'INPUT3'
+    INPUT_FLOWCONDITION = 'INPUT4'
+    INPUT_STORAGE = 'INPUT5'
+    INPUT_TIMESTEP = 'INPUT6'
+    INPUT_TOLERANCE = 'INPUT7'
+    OUTPUT_TRANSIENT = 'OUTPUT'
 
     def tr(self, string):
         """
@@ -53,7 +57,7 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return PCRasterAccucapacityfluxAlgorithm()
+        return PCRasterTransientAlgorithm()
 
     def name(self):
         """
@@ -63,14 +67,14 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'accucapacityflux'
+        return 'transient'
 
     def displayName(self):
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
-        return self.tr('accucapacityflux and accucapicitystate')
+        return self.tr('transient')
 
     def group(self):
         """
@@ -96,17 +100,20 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Transport of material downstream over a local drain direction network
+            """Simulates transient groundwater flow according to the implicit finite difference method.
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_accucapacity.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_transient.html">PCRaster documentation</a>
             
             Parameters:
             
-            * <b>Input flow direction raster</b> (required) - Flow direction in PCRaster LDD format (see lddcreate)
-            * <b>Input material raster</b> (required) - Scalar raster with amount of material input (>= 0)
-            * <b>Input transport capacity raster</b> (required) - Scalar raster with transport capacity (>= 0)
-            * <b>Output Flux raster</b> (required) - Scalar raster with result flux of material
-            * <b>Output State raster</b> (required) - Scalar raster with result state of stored material
+            * <b>Input elevation raster</b> (required) - Scalar elevation raster
+            * <b>Input recharge raster</b> (required) - Scalar raster with recharge [L T-1]
+            * <b>Input transmissivity raster</b> (required) - Scalar raster transmissivity [L2 T-1]
+            * <b>Input flow condition raster</b> (required) - Nominal raster with values for inactive (0), active (1) or constant head (2)
+            * <b>Input storage coefficient raster</b> (required) - Scalar raster with storage coefficient [L3/L3]
+            * <b>Input time step value</b> (required) - Time step [T]
+            * <b>Input tolerance value</b> (required) - Value specifies the maximum difference between the current elevation and the new elevation
+            * <b>Output transient raster</b> (required) - Scalar raster with result
             """
         )
 
@@ -118,36 +125,60 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                self.INPUT_FLOWDIRECTION,
-                self.tr('Input Flow Direction Raster Layer')
+                self.INPUT_ELEVATION,
+                self.tr('Input Elevation Raster Layer')
             )
         )
         
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                self.INPUT_MATERIAL,
-                self.tr('Input Material Raster Layer')
+                self.INPUT_RECHARGE,
+                self.tr('Input Recharge Raster Layer')
             )
         )
         
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                self.INPUT_CAPACITY,
-                self.tr('Input Storage Capacity Raster Layer')
+                self.INPUT_TRANSMISSIVITY,
+                self.tr('Input Transmissivity Raster Layer')
+            )
+        )
+        
+        self.addParameter(
+            QgsProcessingParameterRasterLayer(
+                self.INPUT_FLOWCONDITION,
+                self.tr('Input Flow Condition Raster Layer')
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                self.OUTPUT_FLUX,
-                self.tr('Output Material Flux Raster Layer')
+            QgsProcessingParameterNumber(
+                self.INPUT_STORAGE,
+                self.tr('Storage coefficient'),
+                defaultValue=0.5
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.INPUT_TIMESTEP,
+                self.tr('Time step'),
+                defaultValue=10
+            )
+        )
+        
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.INPUT_TOLERANCE,
+                self.tr('Tolerance'),
+                defaultValue=10
             )
         )
         
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                self.OUTPUT_STATE,
-                self.tr('Output State Raster Layer')
+                self.OUTPUT_TRANSIENT,
+                self.tr('Output Transient Raster Layer')
             )
         )
 
@@ -156,27 +187,27 @@ class PCRasterAccucapacityfluxAlgorithm(QgsProcessingAlgorithm):
         Here is where the processing itself takes place.
         """
 
-        input_flowdirection = self.parameterAsRasterLayer(parameters, self.INPUT_FLOWDIRECTION, context)
-        input_material = self.parameterAsRasterLayer(parameters, self.INPUT_MATERIAL, context)
-        input_capacity = self.parameterAsRasterLayer(parameters, self.INPUT_CAPACITY, context)
-        output_flux = self.parameterAsRasterLayer(parameters, self.OUTPUT_FLUX, context)
-        output_state = self.parameterAsRasterLayer(parameters, self.OUTPUT_STATE, context)
-        setclone(input_flowdirection.dataProvider().dataSourceUri())
-        LDD = readmap(input_flowdirection.dataProvider().dataSourceUri())
-        material = readmap(input_material.dataProvider().dataSourceUri())
-        transportcapacity = readmap(input_capacity.dataProvider().dataSourceUri())
-        resultflux = accucapacityflux(LDD, material, transportcapacity)
-        resultstate = accucapacitystate(LDD, material, transportcapacity)
+        input_elevation = self.parameterAsRasterLayer(parameters, self.INPUT_ELEVATION, context)
+        input_recharge = self.parameterAsRasterLayer(parameters, self.INPUT_RECHARGE, context)
+        input_transmissivity = self.parameterAsRasterLayer(parameters, self.INPUT_TRANSMISSIVITY, context)
+        input_flowcondition = self.parameterAsRasterLayer(parameters, self.INPUT_FLOWCONDITION, context)
+        input_storage = self.parameterAsRasterLayer(parameters, self.INPUT_STORAGE, context)
+        timestep = self.parameterAsDouble(parameters, self.INPUT_TIMESTEP, context)
+        tolerance = self.parameterAsDouble(parameters, self.INPUT_TOLERANCE, context)
+        output_transient = self.parameterAsRasterLayer(parameters, self.OUTPUT_TRANSIENT, context)
+        setclone(input_elevation.dataProvider().dataSourceUri())
+        elevation = readmap(input_elevation.dataProvider().dataSourceUri())
+        recharge = readmap(input_recharge.dataProvider().dataSourceUri())
+        transmissivity = readmap(input_transmissivity.dataProvider().dataSourceUri())
+        flowcondition = readmap(input_flowcondition.dataProvider().dataSourceUri())
+        storage = readmap(input_storage.dataProvider().dataSourceUri())
+        resulttransient = transient(elevation,recharge,transmissivity,flowcondition,storage,timestep,tolerance)
         
-        outputFlux = self.parameterAsOutputLayer(parameters, self.OUTPUT_FLUX, context)
-        outputState = self.parameterAsOutputLayer(parameters, self.OUTPUT_STATE, context)
+        outputTransient = self.parameterAsOutputLayer(parameters, self.OUTPUT_TRANSIENT, context)
 
-        report(resultflux,outputFlux)
-        report(resultstate,outputState)
+        report(resulttransient,outputTransient)
 
         results = {}
-        results[self.OUTPUT_FLUX] = outputFlux
-        results[self.OUTPUT_STATE] = outputState
-        
+        results[self.OUTPUT_TRANSIENT] = outputTransient
         
         return results
