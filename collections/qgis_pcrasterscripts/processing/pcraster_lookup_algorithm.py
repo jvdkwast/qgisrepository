@@ -98,7 +98,19 @@ class PCRasterLookupAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Compares cell value(s) of one or more expression(s) with the search key in a table")
+        return self.tr(
+            """Compares cell value(s) of one or more expression(s) with the search key in a table
+            
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lookup.html">PCRaster documentation</a>
+            
+            Parameters:
+            
+            * <b>Input Raster layers</b> (required) - rasters layer from any data type
+            * <b>Input lookup table</b> (required) - lookup table in ASCII text format. Nr of columns is number of input rasters plus one.
+            * <b>Output data type</b> (required) - data type of output raster
+            * <b>Output raster layer</b> (required) - raster layer with result of the lookup in output data type
+            """
+        )
 
     def initAlgorithm(self, config=None):
         """
