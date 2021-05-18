@@ -164,7 +164,7 @@ class PCRasterSpreadlddzoneAlgorithm(QgsProcessingAlgorithm):
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         output_spread = self.parameterAsRasterLayer(parameters, self.OUTPUT_SPREAD, context)
         setclone(input_ldd.dataProvider().dataSourceUri())
-        LDD = readmap(input_points.dataProvider().dataSourceUri())
+        LDD = readmap(input_ldd.dataProvider().dataSourceUri())
         PointsLayer = readmap(input_points.dataProvider().dataSourceUri())
         InitialFriction = readmap(input_initial.dataProvider().dataSourceUri())
         Friction = readmap(input_friction.dataProvider().dataSourceUri())
