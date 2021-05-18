@@ -134,21 +134,22 @@ class PCRasterConvertdatatypeAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
+        InputRaster = readmap(input_raster.dataProvider().dataSourceUri())
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         #setclone(input_raster.dataProvider().dataSourceUri())
         input_datatype = self.parameterAsEnum(parameters, self.INPUT_DATATYPE, context)
         if input_datatype == 0:
-            ConversionResult = boolean(input_raster)
+            ConversionResult = boolean(InputRaster)
         elif input_datatype == 1:
-            ConversionResult = nominal(input_raster)
+            ConversionResult = nominal(InputRaster)
         elif input_datatype == 2:
-            ConversionResult = ordinal(input_raster)
+            ConversionResult = ordinal(InputRaster)
         elif input_datatype == 3:
-            ConversionResult = scalar(input_raster)
+            ConversionResult = scalar(InputRaster)
         elif input_datatype == 4:
-            ConversionResult = directional(input_raster)
+            ConversionResult = directional(InputRaster)
         else:
-            ConversionResult = ldd(input_raster)
+            ConversionResult = ldd(InputRaster)
 
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 
