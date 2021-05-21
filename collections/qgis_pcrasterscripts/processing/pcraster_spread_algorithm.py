@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -42,6 +43,7 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_POINTS = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_INITIALFRICTION = 'INPUT2'
     INPUT_FRICTION = 'INPUT3'
     OUTPUT_SPREAD = 'OUTPUT'
@@ -103,6 +105,7 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Points raster</b> (required) - boolean, nominal or ordinal raster layer with cells from which the shortest accumulated friction path to every cell centre is calculated
+            * <b>Units</b> (required) - map units or cells
             * <b>Initial friction layer</b> (required) - initial friction at start of spreading, scalar data type
             * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance, scalar data type
             * <b>Result distance layer</b> (required) - Scalar raster with shortest accumulated friction path to every cell centre in map units, scalar data type
@@ -121,7 +124,17 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Points raster')
             )
         )
-        
+ 
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Distance units'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
+ 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_INITIALFRICTION,
@@ -150,6 +163,11 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_points = self.parameterAsRasterLayer(parameters, self.INPUT_POINTS, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_initial = self.parameterAsRasterLayer(parameters, self.INPUT_INITIALFRICTION, context)
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         output_spread = self.parameterAsRasterLayer(parameters, self.OUTPUT_SPREAD, context)

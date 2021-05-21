@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -43,6 +44,7 @@ class PCRasterSpreadlddAlgorithm(QgsProcessingAlgorithm):
 
     INPUT_LDD = 'INPUT'
     INPUT_POINTS = 'INPUT1'
+    INPUT_UNITS = 'INPUT4'
     INPUT_INITIALFRICTION = 'INPUT2'
     INPUT_FRICTION = 'INPUT3'
     OUTPUT_SPREAD = 'OUTPUT'
@@ -105,6 +107,7 @@ class PCRasterSpreadlddAlgorithm(QgsProcessingAlgorithm):
             
             * <b>LDD raster</b> (required) - Raster with local drain direction with LDD data type
             * <b>Points raster</b> (required) - boolean, nominal or ordinal raster layer with cells from which the shortest accumulated friction path to every cell centre is calculated
+            * <b>Units</b> (required) - map units or cells
             * <b>Initial friction layer</b> (required) - initial friction at start of spreading, scalar data type
             * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance, scalar data type
             * <b>Result spread ldd layer</b> (required) - Scalar raster with total friction of the shortest accumulated friction downstream path over map with friction values from an source cell to cell under consideration in map units, scalar data type
@@ -128,6 +131,16 @@ class PCRasterSpreadlddAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterRasterLayer(
                 self.INPUT_POINTS,
                 self.tr('Points raster')
+            )
+        )
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Distance units'),
+                self.unitoption,
+                defaultValue=0
             )
         )
         
@@ -160,6 +173,11 @@ class PCRasterSpreadlddAlgorithm(QgsProcessingAlgorithm):
 
         input_ldd = self.parameterAsRasterLayer(parameters, self.INPUT_LDD, context)
         input_points = self.parameterAsRasterLayer(parameters, self.INPUT_POINTS, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_initial = self.parameterAsRasterLayer(parameters, self.INPUT_INITIALFRICTION, context)
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         output_spread = self.parameterAsRasterLayer(parameters, self.OUTPUT_SPREAD, context)

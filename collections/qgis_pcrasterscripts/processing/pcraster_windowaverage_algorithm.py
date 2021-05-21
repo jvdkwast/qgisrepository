@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -42,6 +43,7 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_RASTER = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_WINDOWLENGTH = 'INPUT2'
     OUTPUT_RASTER = 'OUTPUT'
 
@@ -102,7 +104,8 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input raster layer</b> (required) - scalar raster layer
-            * <b>Input window length</b> (required) - window length value in map units
+            * <b>Units</b> (required) - map units or cells
+            * <b>Input window length</b> (required) - window length value in chosen units
             * <b>Output window average layer</b> (required) - Scalar raster with the average value in the window assigned to the cell
             """
         )
@@ -119,11 +122,21 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Input raster layer')
             )
         )
-
+        
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Unit of Window Length'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
+        
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.INPUT_WINDOWLENGTH,
-                self.tr('Window length (map units)'),
+                self.tr('Window length'),
                 defaultValue=100
             )
         )
@@ -147,6 +160,11 @@ class PCRasterWindowAverageAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_windowlength = self.parameterAsDouble(parameters, self.INPUT_WINDOWLENGTH, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())

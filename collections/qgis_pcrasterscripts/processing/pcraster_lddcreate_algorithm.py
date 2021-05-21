@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -42,6 +43,8 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_DEM = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
+    INPUT_EDGE = 'INPUT0'
     INPUT_OUTFLOWDEPTH = 'INPUT2'
     INPUT_COREVOLUME = 'INPUT3'
     INPUT_COREAREA = 'INPUT4'
@@ -105,6 +108,8 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input DEM layer</b> (required) - scalar raster layer
+            * <b>Remove pits at edge</b> (required) - no/yes
+            * <b>Units</b> (required) - map units or cells
             * <b>Outflow depth value</b> (required) - outflow depth
             * <b>Core volume value</b> (required) - core volume
             * <b>Core area value</b> (required) - core area
@@ -124,6 +129,26 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterRasterLayer(
                 self.INPUT_DEM,
                 self.tr('DEM layer')
+            )
+        )
+
+        self.unitoption = [self.tr('No'),self.tr('Yes')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_EDGE,
+                self.tr('Remove pits at edge?'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
             )
         )
 
@@ -177,6 +202,16 @@ class PCRasterLDDCreateAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_dem = self.parameterAsRasterLayer(parameters, self.INPUT_DEM, context)
+        edgesetting = self.parameterAsEnum(parameters, self.INPUT_EDGE, context)
+        if edgesetting == 0:
+            setglobaloption("lddout")
+        else:
+            setglobaloption("lddin")
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_outflowdepth = self.parameterAsDouble(parameters, self.INPUT_OUTFLOWDEPTH, context)
         input_corearea = self.parameterAsDouble(parameters, self.INPUT_COREAREA, context)
         input_corevolume = self.parameterAsDouble(parameters, self.INPUT_COREVOLUME, context)

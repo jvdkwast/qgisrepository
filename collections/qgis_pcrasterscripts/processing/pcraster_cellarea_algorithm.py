@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_RASTER = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     OUTPUT_RASTER = 'OUTPUT'
 
     def tr(self, string):
@@ -100,6 +102,7 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
              * <b>Input raster layer</b> (required) - raster layer for which the cell area will be calculated
+             * <b>Units</b> (required) - map units or cells
              * <b>Output cell area layer</b> (required) - where the results will be saved.
              
             Results:
@@ -125,6 +128,15 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
@@ -141,7 +153,11 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
-
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())
         #InputRaster = readmap(input_raster.dataProvider().dataSourceUri())

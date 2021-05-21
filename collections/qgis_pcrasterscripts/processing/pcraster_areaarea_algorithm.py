@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_DISCRETE = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     OUTPUT_AREA = 'OUTPUT'
 
     def tr(self, string):
@@ -100,6 +102,7 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input class raster layer</b> (required) - boolean, nominal or ordinal raster layer
+            * <b>Units</b> (required) - map units or cells
             * <b>Output area raster</b> (required) - Scalar raster with true area (map units)
             """
         )
@@ -117,7 +120,16 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
-
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
+        
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_AREA,
@@ -131,7 +143,11 @@ class PCRasterAreaareaAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_discrete = self.parameterAsRasterLayer(parameters, self.INPUT_DISCRETE, context)
-
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         output_area = self.parameterAsRasterLayer(parameters, self.OUTPUT_AREA, context)
         setclone(input_discrete.dataProvider().dataSourceUri())
         ClassLayer = readmap(input_discrete.dataProvider().dataSourceUri())

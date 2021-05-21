@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -42,6 +43,7 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_MASK = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_POINTS = 'INPUT2'
     INPUT_IDP = 'INPUT3'
     INPUT_RADIUS = 'INPUT4'
@@ -107,6 +109,7 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
             * <b>Input mask raster layer</b> (required) - boolean raster layer with mask
             * <b>Raster layer with values to be interpolated</b> (required) - scalar raster layer
             * <b>Power</b> (required) - power of the weight function (default 2)
+            * <b>Units</b> (required) - unit of radius in map units or cells
             * <b>Radius</b> (required) - select only the points at a distance less or equal to the cell. Default 0 includes all points.
             * <b>Maximum number of closest points</b> (required) - the maximum number of points used in the computation. Default 0 includes all points.
             * <b>Inverse Distance Interpolation output</b> (required) - Scalar raster with interpolation result.
@@ -139,6 +142,16 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
                 self.INPUT_IDP,
                 self.tr('Power'),
                 defaultValue=2
+            )
+        )
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
             )
         )
 
@@ -175,6 +188,11 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         input_mask = self.parameterAsRasterLayer(parameters, self.INPUT_MASK, context)
         input_points = self.parameterAsRasterLayer(parameters, self.INPUT_POINTS, context)
         input_idp = self.parameterAsDouble(parameters, self.INPUT_IDP, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_radius = self.parameterAsDouble(parameters, self.INPUT_RADIUS, context)
         input_maxnr = self.parameterAsDouble(parameters, self.INPUT_MAXNR, context)
         output_idw = self.parameterAsRasterLayer(parameters, self.OUTPUT_INVERSEDISTANCE, context)

@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_LDD = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_POINTS = 'INPUT2'
     INPUT_FRICTION = 'INPUT3'
     OUTPUT_LDDDIST = 'OUTPUT'
@@ -102,6 +104,7 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input Local Drain Direction raster</b> (required) - LDD raster
+            * <b>Units</b> (required) - map units or cells
             * <b>Raster layer with cells to which distance is calculated</b> (required) - boolean raster layer
             * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance
             * <b>Result distance layer</b> (required) - Scalar raster with friction-distance from the cell under consideration to downstream nearest TRUE cell
@@ -118,6 +121,16 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterRasterLayer(
                 self.INPUT_LDD,
                 self.tr('LDD layer')
+            )
+        )
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
             )
         )
 
@@ -148,6 +161,11 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_ldd = self.parameterAsRasterLayer(parameters, self.INPUT_LDD, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_points = self.parameterAsRasterLayer(parameters, self.INPUT_POINTS, context)
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         output_ldddist = self.parameterAsRasterLayer(parameters, self.OUTPUT_LDDDIST, context)

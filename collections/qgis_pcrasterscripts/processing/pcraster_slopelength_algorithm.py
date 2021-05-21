@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRasterSlopelengthAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_LDD = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_FRICTION = 'INPUT2'
     OUTPUT_RASTER = 'OUTPUT'
 
@@ -101,6 +103,7 @@ class PCRasterSlopelengthAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input Local Drain Direction raster</b> (required) - LDD raster
+            * <b>Units</b> (required) - map units or cells
             * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance, scalar data type
             * <b>Result slope length layer</b> (required) - Scalar raster with accumulative-friction-distance of the longest accumulative-friction-path upstream over the local drain direction network cells against waterbasin divides
             """
@@ -116,6 +119,16 @@ class PCRasterSlopelengthAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterRasterLayer(
                 self.INPUT_LDD,
                 self.tr('LDD layer')
+            )
+        )
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
             )
         )
       
@@ -139,6 +152,11 @@ class PCRasterSlopelengthAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_ldd = self.parameterAsRasterLayer(parameters, self.INPUT_LDD, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_ldd.dataProvider().dataSourceUri())

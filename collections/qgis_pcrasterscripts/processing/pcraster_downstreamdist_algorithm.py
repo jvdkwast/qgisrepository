@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_LDD = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     OUTPUT_DOWNSTREAMDIST = 'OUTPUT'
 
     def tr(self, string):
@@ -100,6 +102,7 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Input flow direction raster</b> (required) - Flow direction raster in PCRaster LDD format (see lddcreate)
+            * <b>Units</b> (required) - map units or cells
             * <b>Result downstream distance layer</b> (required) - Scalar raster layer with distance in map units to the first cell downstream
             """
         )
@@ -118,6 +121,15 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Units'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
@@ -132,7 +144,11 @@ class PCRasterDownstreamdistAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_ldd = self.parameterAsRasterLayer(parameters, self.INPUT_LDD, context)
-
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         output_downstreamdist = self.parameterAsRasterLayer(parameters, self.OUTPUT_DOWNSTREAMDIST, context)
         setclone(input_ldd.dataProvider().dataSourceUri())
         LDD = readmap(input_ldd.dataProvider().dataSourceUri())

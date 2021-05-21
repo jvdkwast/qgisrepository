@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterRasterLayer,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber)
 from qgis import processing
 from pcraster import *
@@ -41,7 +42,8 @@ class PCRasterSpreadmaxzoneAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    INPUT_POINTS = 'INPUT1'
+    INPUT_POINTS = 'INPUT'
+    INPUT_UNITS = 'INPUT1'
     INPUT_INITIALFRICTION = 'INPUT2'
     INPUT_FRICTION = 'INPUT3'
     INPUT_MAX = 'INPUT4'
@@ -104,6 +106,7 @@ class PCRasterSpreadmaxzoneAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
             * <b>Points raster</b> (required) - boolean, nominal or ordinal raster layer with cells from which the shortest accumulated friction path to every cell centre is calculated
+            * <b>Units</b> (required) - map units or cells
             * <b>Initial friction layer</b> (required) - initial friction at start of spreading, scalar data type
             * <b>Friction raster layer</b> (required) - The amount of increase in friction per unit distance, scalar data type
             * <b>Maximum distance</b> (required) - Maximum distance for which the result is calculated. Beyond this distance cell results are given MV
@@ -125,6 +128,7 @@ class PCRasterSpreadmaxzoneAlgorithm(QgsProcessingAlgorithm):
             )
         )
         
+
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_INITIALFRICTION,
@@ -138,11 +142,21 @@ class PCRasterSpreadmaxzoneAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Friction layer')
             )
         )
-        
+
+        self.unitoption = [self.tr('Map units'),self.tr('Cells')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_UNITS,
+                self.tr('Distance units'),
+                self.unitoption,
+                defaultValue=0
+            )
+        )        
+
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.INPUT_MAX,
-                self.tr('Maximum distance (map units)'),
+                self.tr('Maximum distance'),
                 defaultValue=100
             )
         )
@@ -161,6 +175,11 @@ class PCRasterSpreadmaxzoneAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_points = self.parameterAsRasterLayer(parameters, self.INPUT_POINTS, context)
+        lengthunits = self.parameterAsEnum(parameters, self.INPUT_UNITS, context)
+        if lengthunits == 0:
+            setglobaloption("unittrue")
+        else:
+            setglobaloption("unitcell")
         input_initial = self.parameterAsRasterLayer(parameters, self.INPUT_INITIALFRICTION, context)
         input_friction = self.parameterAsRasterLayer(parameters, self.INPUT_FRICTION, context)
         input_max = self.parameterAsDouble(parameters, self.INPUT_MAX, context)

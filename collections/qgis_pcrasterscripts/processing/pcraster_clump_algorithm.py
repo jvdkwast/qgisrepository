@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingAlgorithm,
                        QgsDataSourceUri,
                        QgsProcessingParameterRasterDestination,
+                       QgsProcessingParameterEnum,
                        QgsProcessingParameterRasterLayer)
 from qgis import processing
 from pcraster import *
@@ -41,6 +42,7 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
     # calling from the QGIS console.
 
     INPUT_RASTER = 'INPUT'
+    INPUT_DIRECTIONS = 'INPUT1'
     OUTPUT_CLUMP = 'OUTPUT'
 
     def tr(self, string):
@@ -100,6 +102,7 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
             Parameters:
             
              * <b>Input raster layer</b> (required) - Boolean, nominal or ordinal raster layer
+             * <b>Input directions</b> (required) - diagonal (D8) or non-diagonal (D4)
              * <b>Output clump raster layer</b> (required) - nominal raster layer with clumps
         """
     )    
@@ -117,6 +120,15 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
+        self.directionoption = [self.tr('Diagonal (8 cell)'),self.tr('Non-diagonal (4 cell)')]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.INPUT_DIRECTIONS,
+                self.tr('Clump direction'),
+                self.directionoption,
+                defaultValue=0
+            )
+        )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
@@ -131,7 +143,11 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
         """
 
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
-
+        direction_options = self.parameterAsEnum(parameters, self.INPUT_DIRECTIONS, context)
+        if direction_options == 0:
+            setglobaloption("diagonal")
+        else:
+            setglobaloption("nondiagonal")
         output_clump = self.parameterAsRasterLayer(parameters, self.OUTPUT_CLUMP, context)
         setclone(input_raster.dataProvider().dataSourceUri())
         ClassLayer = readmap(input_raster.dataProvider().dataSourceUri())
