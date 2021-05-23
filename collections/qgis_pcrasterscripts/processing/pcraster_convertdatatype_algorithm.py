@@ -160,6 +160,6 @@ class PCRasterConvertdatatypeAlgorithm(QgsProcessingAlgorithm):
         report(ConversionResult,outputFilePath)
 
         results = {}
-        results[self.OUTPUT_RASTER] = output_raster
+        results[self.OUTPUT_RASTER] = outputFilePath
         
         return results
