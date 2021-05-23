@@ -99,7 +99,7 @@ class PCRasterLDDDistAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Friction-distance from the cell under consideration to downstream nearest TRUE cell
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_ldddist.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_ldddist.html">PCRaster documentation</a>
             
             Parameters:
             

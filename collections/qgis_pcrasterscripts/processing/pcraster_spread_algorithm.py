@@ -100,7 +100,7 @@ class PCRasterSpreadAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Total friction of the shortest accumulated friction path over a map with friction values from a source cell to cell under consideration
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spread.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_spread.html">PCRaster documentation</a>
             
             Parameters:
             

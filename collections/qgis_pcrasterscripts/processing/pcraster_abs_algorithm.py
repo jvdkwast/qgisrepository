@@ -95,7 +95,7 @@ class PCRasterAbsAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Absolute value
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_abs.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_abs.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -110,7 +110,6 @@ class PCRasterAbsAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-        # We add the input DEM.
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,

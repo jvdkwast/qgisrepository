@@ -95,7 +95,7 @@ class PCRasterPitAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Unique value for each pit cell
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_pit.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_pit.html">PCRaster documentation</a>
             
             Parameters:
             

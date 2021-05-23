@@ -44,7 +44,6 @@ class PCRasterLookuplinearAlgorithm(QgsProcessingAlgorithm):
     # used when calling the algorithm from another algorithm, or when
     # calling from the QGIS console.
 
-    #INPUT_RASTERS = 'INPUT'
     INPUT_RASTER = 'INPUT'
     INPUT_TABLE = 'INPUT1'
     OUTPUT_RASTER = 'OUTPUT'
@@ -101,7 +100,7 @@ class PCRasterLookuplinearAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Assigns table key values with possible interpolation between key values.
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lookuplinear.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_lookuplinear.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -124,12 +123,6 @@ class PCRasterLookuplinearAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
-#        self.addParameter(
-#            QgsProcessingParameterMultipleLayers(
-#                self.INPUT_RASTERS,
-#                self.tr('Input Raster Layer(s)')
-#           )
-#        )
 
         self.addParameter(
             QgsProcessingParameterFile(
@@ -151,19 +144,14 @@ class PCRasterLookuplinearAlgorithm(QgsProcessingAlgorithm):
         Here is where the processing itself takes place.
         """
 
-        #input_rasters = self.parameterAsFileList(parameters, self.INPUT_RASTERS, context)
         input_raster = self.parameterAsRasterLayer(parameters, self.INPUT_RASTER, context)
         input_lookuptable = self.parameterAsFile(parameters, self.INPUT_TABLE, context)
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
-        #filelist = input_rasters.dataProvider().dataSourceUri()
         setclone(input_raster.dataProvider().dataSourceUri())
-        #lookuptable = input_lookuptable
         rasterlayer = readmap(input_raster.dataProvider().dataSourceUri())
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
         
         resultlayer = lookuplinear(input_lookuptable,rasterlayer)
-
-
         
         report(resultlayer,outputFilePath)
 

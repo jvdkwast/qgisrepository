@@ -95,7 +95,7 @@ class PCRasterSlopeAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Slope of cells using a digital elevation model
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_slope.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_slope.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -122,7 +122,7 @@ class PCRasterSlopeAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_SLOPE,
-                self.tr('Slope layer')
+                self.tr('Slope layer'),
             )
         )
 

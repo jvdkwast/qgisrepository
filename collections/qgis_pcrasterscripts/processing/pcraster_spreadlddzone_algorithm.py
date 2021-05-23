@@ -101,7 +101,7 @@ class PCRasterSpreadlddzoneAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Shortest friction-distance path over map with friction from a source cell to cell under consideration, only paths in downstream direction from the source cell are considered
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spreadlddzone.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_spreadlddzone.html">PCRaster documentation</a>
             
             Parameters:
             

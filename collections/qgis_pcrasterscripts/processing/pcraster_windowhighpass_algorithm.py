@@ -99,7 +99,7 @@ class PCRasterWindowHighPassAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Increases spatial frequency within a specified square neighbourhood
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_windowhighpass.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_windowhighpass.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -141,11 +141,6 @@ class PCRasterWindowHighPassAlgorithm(QgsProcessingAlgorithm):
             )
         )
         
-
-
-        # We add a feature sink in which to store our processed features (this
-        # usually takes the form of a newly created vector layer when the
-        # algorithm is run in QGIS).
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_RASTER,

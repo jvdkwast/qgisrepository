@@ -96,7 +96,7 @@ class PCRasterPathAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Path over the local drain direction network downstream to its pit
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_path.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_path.html">PCRaster documentation</a>
             
             Parameters:
             

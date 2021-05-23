@@ -101,7 +101,7 @@ class PCRasterSpreadmaxAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Total friction of the shortest accumulated friction path over a map with friction values from a source cell to cell under consideration considering maximum spread distance
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spreadmax.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_spreadmax.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -158,7 +158,7 @@ class PCRasterSpreadmaxAlgorithm(QgsProcessingAlgorithm):
                 self.tr('Maximum distance'),
                 defaultValue=100
             )
-        )       
+        )
         
         self.addParameter(
             QgsProcessingParameterRasterDestination(

@@ -102,7 +102,7 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Interpolate values using inverse distance weighting
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_inversedistance.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_inversedistance.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -122,7 +122,6 @@ class PCRasterInversedistanceAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-        # We add the input DEM.
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_MASK,

@@ -95,7 +95,7 @@ class PCRasterlddrepairAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Reparation of unsound local drain direction map
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_lddrepair.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_lddrepair.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -110,7 +110,6 @@ class PCRasterlddrepairAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-        # We add the input DEM.
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,

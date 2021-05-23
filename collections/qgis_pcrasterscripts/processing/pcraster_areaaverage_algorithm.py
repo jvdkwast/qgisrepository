@@ -96,7 +96,7 @@ class PCRasterAreaaverageAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """The area of the area to which a cell belongs
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areaaverage.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_areaaverage.html">PCRaster documentation</a>
             
             Parameters:
             

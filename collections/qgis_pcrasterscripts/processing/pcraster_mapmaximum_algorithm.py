@@ -95,7 +95,7 @@ class PCRasterMapmaximumAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Maximum cell value
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_mapmaximum.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_mapmaximum.html">PCRaster documentation</a>
             
             Parameters:
             

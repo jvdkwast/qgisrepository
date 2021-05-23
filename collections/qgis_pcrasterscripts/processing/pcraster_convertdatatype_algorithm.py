@@ -93,9 +93,13 @@ class PCRasterConvertdatatypeAlgorithm(QgsProcessingAlgorithm):
         """
         Returns a localised short helper string for the algorithm. This string
         should provide a basic description about what the algorithm does and the
-        parameters and outputs associated with it..
+        parameters and outputs associated with it.
         """
-        return self.tr("Conversion of the layer data type.")
+        return self.tr(
+        """
+        Conversion of the layer data type.<a href=https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/secfunclist.html#data-types-conversion-and-assignment>PCRaster documentation</a>
+        """
+        )
 
     def initAlgorithm(self, config=None):
         """

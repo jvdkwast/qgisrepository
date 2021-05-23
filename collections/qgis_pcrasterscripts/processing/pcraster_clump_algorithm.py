@@ -97,7 +97,7 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
         """Contiguous groups of cells with the same value (‘clumps’)
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_clump.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_clump.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -105,7 +105,7 @@ class PCRasterClumpAlgorithm(QgsProcessingAlgorithm):
              * <b>Input directions</b> (required) - diagonal (D8) or non-diagonal (D4)
              * <b>Output clump raster layer</b> (required) - nominal raster layer with clumps
         """
-    )    
+    )
 
     def initAlgorithm(self, config=None):
         """

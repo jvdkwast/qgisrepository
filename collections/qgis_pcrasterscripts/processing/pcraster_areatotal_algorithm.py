@@ -96,7 +96,7 @@ class PCRasterAreatotalAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Sum of cell values within an area
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areatotal.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_areatotal.html">PCRaster documentation</a>
             
             Parameters:
             

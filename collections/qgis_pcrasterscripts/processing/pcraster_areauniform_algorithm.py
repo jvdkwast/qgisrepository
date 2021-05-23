@@ -95,7 +95,7 @@ class PCRasterAreauniformAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Value assigned to area taken from a uniform distribution
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areauniform.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_areauniform.html">PCRaster documentation</a>
             
             Parameters:
             

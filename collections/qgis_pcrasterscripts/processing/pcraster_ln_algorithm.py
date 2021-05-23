@@ -95,7 +95,7 @@ class PCRasterlnAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Natural logarithm (e)
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_ln.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_ln.html">PCRaster documentation</a>
             
             Parameters:
             

@@ -98,7 +98,7 @@ class PCRasterAccutraveltimefluxAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Transports material downstream over a distance dependent on a given velocity.
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_accutraveltime.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_accutraveltime.html">PCRaster documentation</a>
             
             Parameters:
             

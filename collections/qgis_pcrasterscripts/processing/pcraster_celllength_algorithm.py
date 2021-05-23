@@ -95,7 +95,7 @@ class PCRastercelllengthAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
         """Horizontal and vertical length of a cell
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_celllength.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_celllength.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -134,7 +134,6 @@ class PCRastercelllengthAlgorithm(QgsProcessingAlgorithm):
 
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())
-        #InputRaster = readmap(input_raster.dataProvider().dataSourceUri())
         celllengthLayer = celllength()
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 

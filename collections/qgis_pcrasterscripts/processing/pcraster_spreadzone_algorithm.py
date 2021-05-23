@@ -100,7 +100,7 @@ class PCRasterSpreadzoneAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Shortest friction-distance path over a map with friction from an identified source cell or cells to the cell under consideration
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spreadzone.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_spreadzone.html">PCRaster documentation</a>
             
             Parameters:
             

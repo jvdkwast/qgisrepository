@@ -97,7 +97,7 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
         """Area of one cell
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_cellarea.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_cellarea.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -112,7 +112,7 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
     )
         
     def helpUrl(self):
-        return "https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_cellarea.html"
+        return "https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_cellarea.html"
 
     def initAlgorithm(self, config=None):
         """
@@ -120,7 +120,6 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
 
-        # We add the input DEM.
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 self.INPUT_RASTER,
@@ -160,7 +159,6 @@ class PCRastercellareaAlgorithm(QgsProcessingAlgorithm):
             setglobaloption("unitcell")
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())
-        #InputRaster = readmap(input_raster.dataProvider().dataSourceUri())
         cellareaLayer = cellarea()
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 

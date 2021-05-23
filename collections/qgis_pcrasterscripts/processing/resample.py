@@ -99,7 +99,7 @@ class ResampleAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Cuts one map or joins together several maps by resampling to the cells of the result map.
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/app_resample.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/app_resample.html">PCRaster documentation</a>
             
             Parameters:
             

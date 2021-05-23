@@ -95,7 +95,7 @@ class PCRasterpredAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Ordinal number of the next lower ordinal class
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_pred.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_pred.html">PCRaster documentation</a>
             
             Parameters:
             

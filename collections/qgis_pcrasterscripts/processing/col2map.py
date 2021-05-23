@@ -98,7 +98,11 @@ class Col2mapAlgorithm(QgsProcessingAlgorithm):
         should provide a basic description about what the algorithm does and the
         parameters and outputs associated with it..
         """
-        return self.tr("Convert CSV files to PCRaster format with control of the output data type")
+        return self.tr(
+        """
+        Convert CSV files to PCRaster format with control of the output data type. The algorithm uses <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/app_col2map.html">col2map</a>
+        """
+        )
 
     def initAlgorithm(self, config=None):
         """

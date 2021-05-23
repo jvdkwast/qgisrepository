@@ -96,7 +96,7 @@ class PCRasterAreamajorityAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Most often occurring cell value within an area
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_areamajority.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_areamajority.html">PCRaster documentation</a>
             
             Parameters:
             

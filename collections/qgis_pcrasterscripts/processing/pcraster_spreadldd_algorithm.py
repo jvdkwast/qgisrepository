@@ -101,7 +101,7 @@ class PCRasterSpreadlddAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             """Total friction of the shortest accumulated friction downstream path over map with friction values from an source cell to cell under consideration
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_manual/sphinx/op_spreadldd.html">PCRaster documentation</a>
+            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_spreadldd.html">PCRaster documentation</a>
             
             Parameters:
             
