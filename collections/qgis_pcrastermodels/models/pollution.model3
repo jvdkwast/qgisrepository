@@ -551,7 +551,18 @@
     </Option>
   </Option>
   <Option name="groupBoxes"/>
-  <Option name="help"/>
+  <Option name="help" type="Map">
+    <Option value="Hans van der Kwast" name="ALG_CREATOR" type="QString"/>
+    <Option value="Route materials over the local drain direction" name="ALG_DESC" type="QString"/>
+    <Option value="Hans van der Kwast" name="ALG_HELP_CREATOR" type="QString"/>
+    <Option value="1.0" name="ALG_VERSION" type="QString"/>
+    <Option value="Field with the ID's" name="Field" type="QString"/>
+    <Option value="PCRaster LDD map (result of lddcreate)" name="LocalDrainDirectionRaster" type="QString"/>
+    <Option value="Vector data (any geometry) with material sources" name="PollutionSource" type="QString"/>
+    <Option value="" name="SHORT_DESCRIPTION" type="QString"/>
+    <Option value="Distance from source over the drainage network" name="script:spreadldd_1:Spread LDD Result" type="QString"/>
+    <Option value="Flow path along the drainage network with ID of the source" name="script:spreadlddzone_1:Spread LDD Zone Result" type="QString"/>
+  </Option>
   <Option name="modelVariables"/>
   <Option value="Hydrology" name="model_group" type="QString"/>
   <Option value="Pollution" name="model_name" type="QString"/>
