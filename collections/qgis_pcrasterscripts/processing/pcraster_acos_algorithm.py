@@ -50,7 +50,7 @@ class PCRasterAcosAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return PCRasteracosAlgorithm()
+        return PCRasterAcosAlgorithm()
 
     def name(self):
         """
