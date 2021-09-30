@@ -1,10 +1,14 @@
+Note that the PCRaster Processing Tools are now available through the official QGIS Plugins repository
+
+See https://jvdkwast.github.io/qgis-processing-pcraster/ for more info
+
 QGIS processing scripts to make PCRaster available in the Processing Toolbox. 
 
 Install PCRaster and QGIS in a conda environment.
 
 1. Use the Anaconda prompt
 
-Create the environment as explained here: https://pcraster.geo.uu.nl/pcraster/4.3.0/documentation/pcraster_project/install.html Basically this command will do the job:
+Create the environment as explained here: https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_project/install.html Basically this command will do the job:
 
 conda create --name pcrasterqgis -c conda-forge python=3.9.2 pcraster qgis
 
