@@ -1,6 +1,6 @@
-Note that the PCRaster Processing Tools are now available through the official QGIS Plugins repository
+**Note that the PCRaster Processing Tools are now available through the official QGIS Plugins repository**
 
-See https://jvdkwast.github.io/qgis-processing-pcraster/ for more info
+**See https://jvdkwast.github.io/qgis-processing-pcraster/ for more info**
 
 QGIS processing scripts to make PCRaster available in the Processing Toolbox. 
 
