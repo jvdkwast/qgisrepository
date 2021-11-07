@@ -106,9 +106,8 @@ class PCRasterBurndemAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Modified digital elevation model
+            """Burned digital elevation model
             
-            <a href="https://pcraster.geo.uu.nl/pcraster/4.3.1/documentation/pcraster_manual/sphinx/op_lddcreatedem.html">PCRaster documentation</a>
             
             Parameters:
             
@@ -121,7 +120,7 @@ class PCRasterBurndemAlgorithm(QgsProcessingAlgorithm):
             * <b>Core volume value</b> (required) - core volume
             * <b>Core area value</b> (required) - core area
             * <b>Catchment precipitation</b> (required) - catchment precipitation
-            * <b>Local drain direction layer output</b> (required) - raster with local drain direction (ldd data type)
+            * <b>Burned DEM output</b> (required) - raster with burned DEM (scalar data type)
             """
         )
 
