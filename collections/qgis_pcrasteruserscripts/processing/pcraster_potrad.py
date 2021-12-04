@@ -10,18 +10,34 @@
 *                                                                         *
 ***************************************************************************
 """
+from pcraster import (
+    readmap,
+    setclone,
+    scalar,
+    atan,
+    aspect,
+    cos,
+    acos,
+    sin,
+    horizontan,
+    ifthenelse,
+    sqrt,
+    slope,
+    asin,
+    directional,
+    report
+)
 
-from qgis.PyQt.QtCore import QCoreApplication
-from qgis.core import (QgsProcessing,
-                       QgsProcessingException,
-                       QgsProcessingAlgorithm,
-                       QgsDataSourceUri,
-                       QgsProcessingParameterRasterDestination,
-                       QgsProcessingParameterRasterLayer,
-                       QgsProcessingParameterNumber)
 from qgis import processing
-from pcraster import *
-
+from qgis.PyQt.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.core import (
+    QgsProcessingAlgorithm,
+    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterNumber,
+    QgsProcessingParameterCrs,
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterNumber)
 
 class PotRadAlgorithm(QgsProcessingAlgorithm):
     """

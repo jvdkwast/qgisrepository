@@ -38,7 +38,7 @@ from qgis.core import (
 
 #from pcraster_tools.processing.algorithm import PCRasterAlgorithm
 
-class MedianAlgorithm(QgsProcessingAlgorithm):
+class mapaverageAlgorithm(QgsProcessingAlgorithm):
     INPUT_RASTER = 'INPUT'
     OUTPUT_RASTER = 'OUTPUT'
 
@@ -49,7 +49,7 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return MedianAlgorithm()
+        return mapaverageAlgorithm()
 
     def name(self):
         """
@@ -59,14 +59,14 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'median'
+        return 'mapaverage'
 
     def displayName(self):
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
-        return self.tr('median')
+        return self.tr('mapaverage')
 
     def group(self):
         """
@@ -92,12 +92,12 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Calculates median of a raster layer
+            """Calculates average of a raster layer
           
           
             Parameters:
             
-            * <b>Input raster</b> (required) - ordinal or scalar raster layer
+            * <b>Input raster</b> (required) - raster layer
             * <b>Output raster</b> (required) - Scalar raster with result
             """
         )
@@ -119,7 +119,7 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 self.OUTPUT_RASTER,
-                self.tr("Output median raster layer")
+                self.tr("Output average raster layer")
             )
         )
 
@@ -128,16 +128,12 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
         setclone(input_raster.dataProvider().dataSourceUri())
         InputRaster = readmap(input_raster.dataProvider().dataSourceUri())
-        OrderMap = order(InputRaster)
-        Total = cellvalue(maptotal(scalar(InputRaster)), 0, 0)
-        NumCells = cellvalue(maparea(InputRaster) / cellarea(), 0, 0)
-        mean = Total[0] / NumCells[0]
-        Mid = roundoff(mean)
-        MidMap = ifthenelse(OrderMap == Mid, InputRaster, 0)
-        Median = mapmaximum(MidMap)
+        Total = maptotal(scalar(InputRaster))
+        NumCells = maparea(InputRaster) / cellarea()
+        Mean = Total / NumCells
         outputFilePath = self.parameterAsOutputLayer(parameters, self.OUTPUT_RASTER, context)
 
-        report(Median,outputFilePath)
+        report(Mean,outputFilePath)
         
 #        self.set_output_crs(output_file=outputFilePath, crs=input_raster.crs(), feedback=feedback, context=context)
 

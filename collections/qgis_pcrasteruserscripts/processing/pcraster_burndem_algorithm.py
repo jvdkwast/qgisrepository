@@ -11,18 +11,28 @@
 ***************************************************************************
 """
 
-from qgis.PyQt.QtCore import QCoreApplication
-from qgis.core import (QgsProcessing,
-                       QgsProcessingException,
-                       QgsProcessingAlgorithm,
-                       QgsDataSourceUri,
-                       QgsProcessingParameterRasterDestination,
-                       QgsProcessingParameterRasterLayer,
-                       QgsProcessingParameterEnum,
-                       QgsProcessingParameterNumber)
-from qgis import processing
-from pcraster import *
+from pcraster import (
+    readmap,
+    setclone,
+    lddcreatedem,
+    spread,
+    ifthenelse,
+    setglobaloption,
+    report
+)
 
+from qgis import processing
+from qgis.PyQt.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.core import (
+    QgsProcessing,
+    QgsProcessingException,
+    QgsProcessingAlgorithm,
+    QgsDataSourceUri,
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterEnum,
+    QgsProcessingParameterNumber)
 
 class PCRasterBurndemAlgorithm(QgsProcessingAlgorithm):
     """
@@ -87,7 +97,7 @@ class PCRasterBurndemAlgorithm(QgsProcessingAlgorithm):
         Returns the name of the group this algorithm belongs to. This string
         should be localised.
         """
-        return self.tr('PCRaster')
+        return self.tr('PCRaster User Scripts')
 
     def groupId(self):
         """
@@ -97,7 +107,7 @@ class PCRasterBurndemAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'pcraster'
+        return 'pcrasteruser'
 
     def shortHelpString(self):
         """
