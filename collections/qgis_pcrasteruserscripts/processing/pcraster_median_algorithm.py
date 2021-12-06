@@ -59,14 +59,14 @@ class MedianAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'median'
+        return 'mapmedian'
 
     def displayName(self):
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
-        return self.tr('median')
+        return self.tr('mapmedian')
 
     def group(self):
         """
