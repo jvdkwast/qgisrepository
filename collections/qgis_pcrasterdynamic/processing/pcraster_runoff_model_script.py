@@ -93,7 +93,7 @@ class runoffModelAlgorithm(QgsProcessingAlgorithm):
         Returns the name of the group this algorithm belongs to. This string
         should be localised.
         """
-        return self.tr('PCRaster Dynamic Models')
+        return self.tr('PCRaster User Scripts')
 
     def groupId(self):
         """
@@ -103,7 +103,7 @@ class runoffModelAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'pcrasterdynamic'
+        return 'pcrasteruser'
 
     def shortHelpString(self):
         """
@@ -113,7 +113,7 @@ class runoffModelAlgorithm(QgsProcessingAlgorithm):
         """
         return self.tr(
             """Runoff model provided with <a href="https://pcraster.geo.uu.nl/downloads/demo-data/">PCRaster demo data</a>
-            Results will be displayed as an animation with <a href="https://pcraster.geo.uu.nl/pcraster/4.3.3/documentation/pcraster_aguila/QuickStart.html">Aguila</a>
+            Results will be displayed as an animation in with <a href="https://pcraster.geo.uu.nl/pcraster/4.3.3/documentation/pcraster_aguila/QuickStart.html">Aguila</a>
             
             Parameters:
             
