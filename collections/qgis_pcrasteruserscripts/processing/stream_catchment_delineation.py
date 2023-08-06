@@ -169,8 +169,6 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
         FlowDirection = lddcreate(DEM,1e31,1e31,1e31,1e31)
         output_ldd = self.parameterAsOutputLayer(parameters, self.OUTPUT_FLOWDIRECTION, context)
         report(FlowDirection,output_ldd)
-        
-        outputs['ThinRiverRaster'] = processing.run('grass7:r.thin', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(5)
         if feedback.isCanceled():
@@ -228,6 +226,7 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
             'output': QgsProcessing.TEMPORARY_OUTPUT
         }
         
+        outputs['ThinRiverRaster'] = processing.run('grass7:r.thin', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
 
         feedback.setCurrentStep(8)
         if feedback.isCanceled():
@@ -277,6 +276,7 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
             'OUTPUT': parameters[self.OUTPUT_STREAMS]
         }
         outputs['FixGeometries'] = processing.run('native:fixgeometries', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
+        results['OutputStreams'] = outputs['FixGeometries']['OUTPUT']
 
         feedback.setCurrentStep(11)
         if feedback.isCanceled():
@@ -314,7 +314,6 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
         }
         outputs['AssignProjection'] = processing.run('native:assignprojection', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
         results['OutputCatchmentPolygon'] = outputs['AssignProjection']['OUTPUT']
-        results['OutputStreams'] = outputs['FixGeometries']['OUTPUT']
         
         return results
 
