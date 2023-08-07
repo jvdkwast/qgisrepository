@@ -18,6 +18,7 @@ from pcraster import (
     boolean,
     accuflux,
     ordinal,
+    scalar,
     report
 )
 
@@ -187,7 +188,8 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
         feedback.pushInfo("Deriving stream network raster...")
         input_threshold = self.parameterAsInt(parameters,self.INPUT_THRESHOLD,context)
         river = ifthen(StrahlerOrders >= ordinal(input_threshold), StrahlerOrders)
-        report(river,os.path.join(output_folder,"river.map"))
+        riverstrahler = ordinal(scalar(river) - (scalar(input_threshold) - 1))
+        report(riverstrahler,os.path.join(output_folder,"river.map"))
 
         # import outlet to PCRaster
         feedback.pushInfo("Snapping outlet to stream...")
@@ -336,7 +338,7 @@ class StreamAndCatchmentDelineation(QgsProcessingAlgorithm):
 <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Calculate streams and catchment boundary for a given extent and outlet. Make sure you have installed the PCRaster Tools plugin and the OpenTopography DEM Downloader plugin</p></body></html></p>
 <h2>Input parameters</h2>
 <h3>Select DEM to download</h3>
-<p>Choose the DEM that you want to dowload from <a href=https://opentopography.org/>OpenTopography</a></p>
+<p>Choose the DEM that you want to dowload from <a href="https://opentopography.org/">OpenTopography</a></p>
 <h3>OpenTopography API Key</h3>
 <p>Get your key from https://opentopography.org/</p>
 <h3>Study area extent</h3>
