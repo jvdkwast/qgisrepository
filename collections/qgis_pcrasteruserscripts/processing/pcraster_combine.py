@@ -29,8 +29,6 @@ from qgis.core import (
     QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterRasterDestination)
 
-#from pcraster_tools.processing.algorithm import PCRasterAlgorithm
-
 class combineAlgorithm(QgsProcessingAlgorithm):
     INPUT_RASTER = 'INPUT'
     INPUT_RASTERS = 'INPUT1'
@@ -86,8 +84,8 @@ class combineAlgorithm(QgsProcessingAlgorithm):
         parameters and outputs associated with it..
         """
         return self.tr(
-            """Calculates average of a raster layer
-          
+            """
+            Combines multiple nominal rasters so that a unique output value is assigned to each unique combination of input values.
           
             Parameters:
             
