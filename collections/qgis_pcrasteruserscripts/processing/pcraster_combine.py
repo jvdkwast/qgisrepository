@@ -31,7 +31,7 @@ from qgis.core import (
 
 #from pcraster_tools.processing.algorithm import PCRasterAlgorithm
 
-class mapaverageAlgorithm(QgsProcessingAlgorithm):
+class combineAlgorithm(QgsProcessingAlgorithm):
     INPUT_RASTER = 'INPUT'
     INPUT_RASTERS = 'INPUT1'
     OUTPUT_RASTER = 'OUTPUT'
@@ -43,7 +43,7 @@ class mapaverageAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return mapaverageAlgorithm()
+        return combineAlgorithm()
 
     def name(self):
         """
