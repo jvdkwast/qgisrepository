@@ -124,7 +124,7 @@ class combineAlgorithm(QgsProcessingAlgorithm):
         for layer in self.parameterAsLayerList(parameters, self.INPUT_RASTERS, context):
             input_rasters.append(layer.source())
         output_raster = self.parameterAsRasterLayer(parameters, self.OUTPUT_RASTER, context)
-        #setclone(input_rasters[0].dataProvider().dataSourceUri())
+        setclone(input_rasters[0])
         
         combined_map = scalar(0)
         
